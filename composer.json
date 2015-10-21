@@ -1,0 +1,11 @@
+{
+  "name": "sonata/attribute-bundle",
+  "type": "library",
+  "description": "Attribute bundle",
+  "keywords": ["eav","dynamic attribute"],
+  "autoload": {
+    "psr-4": { "Core\\AttributeBundle\\": "" }
+  },
+  "require": {
+  }
+}

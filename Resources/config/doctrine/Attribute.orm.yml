@@ -1,0 +1,23 @@
+Core\AttributeBundle\Entity\Attribute:
+    type: entity
+    table: attribute_value
+    inheritanceType: single_table
+    discriminatorColumn:
+        name: type
+        type: string
+        length: 64
+    id:
+        id:
+            type: integer
+            generator:
+                strategy:   AUTO
+    fields:
+    manyToOne:
+        type:
+            fieldName:      type
+            targetEntity:   Core\AttributeBundle\Entity\Type
+            cascade:        [persist]
+        parent:
+            targetEntity: Core\AttributeBundle\Entity\CollectionAttribute
+            inversedBy: collectionValue
+            cascade: [persist]

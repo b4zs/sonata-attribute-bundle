@@ -1,0 +1,19 @@
+{% extends 'SonataAdminBundle:CRUD:base_edit.html.twig' %}
+
+
+{% block form %}
+	{% set persistentParameters = admin.getPersistentParameters() %}
+	<h1>Choose preset</h1>
+	<ul>
+		{% for name, label in presets %}
+		{% set routeParams = { preset: name }|merge(persistentParameters) %}
+		<li>
+			<a href="{{ url('admin_core_attribute_type_create', routeParams) }}">{{ label }}</a>
+		</li>
+		{% endfor %}
+	</ul>
+{% endblock %}
+
+
+
+

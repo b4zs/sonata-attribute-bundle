@@ -1,0 +1,8 @@
+Core\AttributeBundle\Entity\CollectionAttribute:
+    type: entity
+    oneToMany:
+        collectionValue:
+            targetEntity: Core\AttributeBundle\Entity\Attribute
+            mappedBy: parent
+            cascade:  [persist, remove]
+            orphanRemoval: true

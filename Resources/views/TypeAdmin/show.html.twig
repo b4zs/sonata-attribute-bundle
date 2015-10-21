@@ -1,0 +1,40 @@
+{% extends '@SonataAdmin/CRUD/base_show.html.twig' %}
+
+{% block navbar_title %}
+	Testing {{ admin.subject.name|json_encode }} form
+{% endblock %}
+
+{% block show %}
+	<div class="sonata-ba-view">
+		{#{{ dump(object) }}#}
+
+		{{ sonata_block_render_event('sonata.admin.show.top', { 'admin': admin, 'object': object }) }}
+
+		<div class="panel">
+			{{ form_start(form) }}
+			<div class="panel-body">
+				{{ form_widget(form) }}
+			</div>
+			<div class="panel-footer">
+				<input type="submit" value="submit" class="btn btn-primary">
+
+			</div>
+			{{ form_end(form) }}
+		</div>
+
+
+		<h4>request data</h4>
+		{{ dump(app.request.request.get(form.vars.id)) }}
+
+		<h4>form data</h4>
+		{{ dump(form.vars.value) }}
+
+
+
+
+		{{ sonata_block_render_event('sonata.admin.show.bottom', { 'admin': admin, 'object': object }) }}
+
+	</div>
+{% endblock %}
+
+

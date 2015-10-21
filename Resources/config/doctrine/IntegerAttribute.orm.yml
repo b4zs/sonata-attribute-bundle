@@ -1,0 +1,8 @@
+Core\AttributeBundle\Entity\IntegerAttribute:
+    type: entity
+    fields:
+        integerValue:
+            column: integer_value
+            type: integer
+            nullable: true
+        

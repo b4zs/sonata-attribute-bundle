@@ -1,0 +1,8 @@
+Core\AttributeBundle\Entity\BooleanAttribute:
+    type: entity
+    fields:
+        booleanValue:
+            column: boolean_value
+            type: boolean
+            nullable: true
+        

@@ -1,0 +1,10 @@
+{% extends '@SonataAdmin/CRUD/base_list.html.twig' %}
+
+{% block navbar_title %}
+{% spaceless %}
+	{% set parentType = admin.getParentType() %}
+	{% if parentType %}
+	Fields of {{ parentType.name|json_encode }}
+	{% endif %}
+{% endspaceless %}
+{% endblock %}

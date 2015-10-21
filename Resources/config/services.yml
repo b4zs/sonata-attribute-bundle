@@ -1,0 +1,15 @@
+services:
+#    core_attribute.example:
+#        class: Core\AttributeBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    core_attribute.admin.type:
+        class: Core\AttributeBundle\Admin\TypeAdmin
+        arguments: [~, Core\AttributeBundle\Entity\Type, CoreAttributeBundle:TypeAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: admin, label: Type}
+
+    core_attribute.admin.attribute:
+        class: Core\AttributeBundle\Admin\AttributeAdmin
+        arguments: [~, Core\AttributeBundle\Entity\Attribute, CoreAttributeBundle:AttributeAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: admin, label: Attribute}

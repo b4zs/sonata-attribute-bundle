@@ -1,0 +1,52 @@
+Core\AttributeBundle\Entity\Type:
+    type: entity
+    table: attribute_type
+    id:
+        id:
+            type: integer
+            generator:
+                strategy:   AUTO
+    fields:
+        name:
+            type:     string
+            length:   255
+        label:
+            type:     string
+            length:   255
+            nullable: true
+        position:
+            type:     integer
+            nullable: true
+
+        attributeClass:
+            type:     string
+            length:   255
+        valueClass:
+            type:     string
+            length:   255
+            nullable: true
+        formType:
+            type:     string
+            length:   255
+        formOptions:
+            type:     json_array
+    manyToOne:
+        parent:
+            fieldName:      parent
+            targetEntity:   Core\AttributeBundle\Entity\Type
+            cascade:        [persist]
+            inversedBy:     children
+            joinColumn:
+                name:                 parent_id
+                referencedColumnName: id
+                onDelete:             CASCADE
+            orphanRemoval:  false
+    oneToMany:
+        children:
+            fieldName:      children
+            targetEntity:   Core\AttributeBundle\Entity\Type
+            cascade:        [persist]
+            mappedBy:       parent
+            orphanRemoval:  true
+            orderBy:
+                position: ASC

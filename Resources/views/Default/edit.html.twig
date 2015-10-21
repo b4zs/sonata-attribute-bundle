@@ -1,0 +1,16 @@
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+	<h1><a href="{{ url('core_attribute_list') }}">&laquo;</a></h1>
+	<h1>[{{ type.name }}]{{ data and data.id ? '#'~data.id : 'create' }}</h1>
+
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<input type="submit" value="send">
+	{{ form_end(form) }}
+
+	<hr>
+	{% if form.vars.data %}
+		{{ dump(form.vars.data.serialize()) }}
+	{% endif %}
+{% endblock %}
