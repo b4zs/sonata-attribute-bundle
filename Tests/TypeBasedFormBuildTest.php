@@ -4,17 +4,25 @@
 namespace Core\AttributeBundle\Tests;
 
 
+use Core\AttributeBundle\Entity\BooleanAttribute;
 use Core\AttributeBundle\Entity\CollectionAttribute;
 use Core\AttributeBundle\Entity\Type;
+use Core\AttributeBundle\Form\AttributeBasedType;
 use Core\AttributeBundle\Form\DataTransformer\AttributeToValueTransformer;
 use Core\ToolsBundle\Tests\ContainerAwareTest;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\ReversedTransformer;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class TypeBasedFormBuildTest extends ContainerAwareTest
+class TypeBasedFormBuildTest extends KernelTestCase
 {
+	public function setUp() {
+		parent::setUp();
+		static::bootKernel();
+	}
+
 	/**
 	 * @return array
 	 */
@@ -42,12 +50,20 @@ class TypeBasedFormBuildTest extends ContainerAwareTest
 		$idType->setFormType('number');
 		$rootType->addChildren($idType);
 
-		return array($rootType, $usernameType, $idType);
+
+		$booleanType = new Type();
+		$booleanType->setName('checkbox');
+		$booleanType->setLabel('checkbox');
+		$booleanType->setAttributeClass($namespace . 'BooleanAttribute');
+		$booleanType->setFormType('checkbox');
+		$rootType->addChildren($booleanType);
+
+		return array($rootType, $usernameType, $idType, $booleanType);
 	}
 
 	public static function buildType(ContainerInterface $container)
 	{
-		list($rootType, $usernameType, $idType) = self::buildDemoType();
+		list($rootType, $usernameType, $idType, $booleanType) = self::buildDemoType();
 
 
 		$data = new CollectionAttribute();
@@ -66,14 +82,19 @@ class TypeBasedFormBuildTest extends ContainerAwareTest
 		$data->id = $idAttribute;
 
 
-		$formFactory = $container->get('form.factory');
-		$rootForm = $formFactory->createBuilder($rootType->getFormType(), $data, $rootType->buildFormOptions());
-		$attributeToValueTransformer = new AttributeToValueTransformer();
-		$attributeToValueTransformer->setType($rootType);
-		$rootForm->addModelTransformer($attributeToValueTransformer);
+		$attributeClass = $booleanType->getAttributeClass();
+		/** @var BooleanAttribute $booleanAttribute */
+		$booleanAttribute = new $attributeClass();
+		$booleanAttribute->setValue(true);
+		$booleanAttribute->setType($booleanType);
+		$data->checkbox = $booleanAttribute;
 
-		self::addChild($rootForm, $usernameType);
-		self::addChild($rootForm, $idType);
+
+
+
+
+		$formFactory = $container->get('form.factory');
+		$rootForm = $formFactory->createBuilder(new AttributeBasedType($rootType), $data, $rootType->buildFormOptions());
 
 		return $rootForm->getForm();
 	}
@@ -85,15 +106,31 @@ class TypeBasedFormBuildTest extends ContainerAwareTest
 
 	public function testStructureCanBeCreated()
 	{
-		$form = self::buildType($this->getContainer());
+		$container = static::$kernel->getContainer();
+		$form = self::buildType($container);
 		$form->submit(array(
 			'username' => 'alma',
+			'checkbox' => true,
+			'id' => 234,
 		));
-		var_dump($form->getData());
+		\Doctrine\Common\Util\Debug::dump($form->getData(), 4);
+		$em = $container->get('doctrine.orm.default_entity_manager');
+		$em->persist($form->getData());
+		$em->flush();
+
+		$view = $form->createView();
+
+		$html = static::$kernel->getContainer()->get('twig')->render('CoreAttributeBundle:Test:form.html.twig', array(
+			'form' => $view,
+		));
+
+		file_put_contents('../test_output.html', $html);
+//		exec('open ../test_output.html');//osx only
 	}
 
 	public static function addChild(FormBuilder $root, Type $type)
 	{
+		$container = static::$kernel->getContainer();
 		$formFactory = $container->get('form.factory');
 		$childForm = $root->create($type->getName(), $type->getFormType(), $type->buildFormOptions());
 		$root->add($childForm);
