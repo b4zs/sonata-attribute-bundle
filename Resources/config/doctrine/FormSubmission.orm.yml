@@ -1,0 +1,33 @@
+Core\AttributeBundle\Entity\FormSubmission:
+    type: entity
+    table: attribute_submission
+    gedmo:
+        soft_deleteable:
+            field_name: deletedAt
+    id:
+        id:
+            type: integer
+            generator:
+                strategy:   AUTO
+    fields:
+        createdAt:
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: create
+        updatedAt:
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: update
+        deletedAt:
+            type: datetime
+            nullable: true
+    oneToOne:
+        collection:
+            targetEntity: Core\AttributeBundle\Entity\CollectionAttribute
+            cascade: ["all"]
+            orphanRemoval: true
+    manyToOne:
+        type:
+            targetEntity: Core\AttributeBundle\Entity\Type
