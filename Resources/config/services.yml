@@ -13,3 +13,13 @@ services:
         arguments: [~, Core\AttributeBundle\Entity\Attribute, CoreAttributeBundle:AttributeAdmin]
         tags:
             - {name: sonata.admin, manager_type: orm, group: admin, label: Attribute}
+
+    core_attribute.block.service.form:
+        class: Core\AttributeBundle\Block\Service\FormBlockService
+        arguments:
+            - 'Form'
+            - @templating
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - { name: sonata.block }
