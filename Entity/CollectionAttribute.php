@@ -51,8 +51,24 @@ class CollectionAttribute extends Attribute
 				throw new \RuntimeException('property name and attribute.type.name differs');
 			}
 
+			var_dump(array(
+				$this->getType()->getName(),
+				$value->getType()->getName(),
+				$value->getValue()
+			));
+
+			foreach($this->getValue() as $key => $child){
+				if($child->getType()->getName() == $value->getType()->getName()){
+					$this->getValue()->remove($key);
+					break;
+				}
+			}
+
+
+
 			$value->setParent($this);
 			$this->getValue()->add($value);
+
 		} else {
 			throw new \InvalidArgumentException('Argument 2. must be an instance of Attribute');
 		}

@@ -14,7 +14,7 @@ class BooleanAttribute extends Attribute
 	 */
 	public function getValue()
 	{
-		return $this->stringValue;
+		return $this->booleanValue;
 	}
 
 	/**
@@ -23,7 +23,7 @@ class BooleanAttribute extends Attribute
 	public function setValue($value)
 	{
 		$this->assertValue($value);
-		$this->stringValue = $value;
+		$this->booleanValue = $value;
 	}
 
 	protected function getValueType()
