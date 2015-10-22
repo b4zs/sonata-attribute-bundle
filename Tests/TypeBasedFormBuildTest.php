@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\ReversedTransformer;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Validator\Constraints\Collection;
 
 class TypeBasedFormBuildTest extends KernelTestCase
 {
@@ -50,7 +51,6 @@ class TypeBasedFormBuildTest extends KernelTestCase
 		$idType->setFormType('number');
 		$rootType->addChildren($idType);
 
-
 		$booleanType = new Type();
 		$booleanType->setName('checkbox');
 		$booleanType->setLabel('checkbox');
@@ -58,13 +58,28 @@ class TypeBasedFormBuildTest extends KernelTestCase
 		$booleanType->setFormType('checkbox');
 		$rootType->addChildren($booleanType);
 
-		return array($rootType, $usernameType, $idType, $booleanType);
+		$fieldsetType = new Type();
+		$fieldsetType->setName('fieldset');
+		$fieldsetType->setLabel('fieldset');
+		$fieldsetType->setAttributeClass($namespace . 'CollectionAttribute');
+		$fieldsetType->setFormType('form');
+		$fieldsetType->setValueClass($namespace.'CollectionAttribute');
+
+		$phoneType = new Type();
+		$phoneType->setName('phone');
+		$phoneType->setLabel('phone');
+		$phoneType->setAttributeClass($namespace . 'StringAttribute');
+		$phoneType->setFormType('text');
+		$fieldsetType->addChildren($phoneType);
+
+		$rootType->addChildren($fieldsetType);
+
+		return array($rootType, $usernameType, $idType, $booleanType, $fieldsetType, $phoneType);
 	}
 
 	public static function buildType(ContainerInterface $container)
 	{
-		list($rootType, $usernameType, $idType, $booleanType) = self::buildDemoType();
-
+		list($rootType, $usernameType, $idType, $booleanType, $fieldsetType, $phoneType) = self::buildDemoType();
 
 		$data = new CollectionAttribute();
 		$data->setType($rootType);
@@ -89,9 +104,18 @@ class TypeBasedFormBuildTest extends KernelTestCase
 		$booleanAttribute->setType($booleanType);
 		$data->checkbox = $booleanAttribute;
 
+		$attributeClass = $fieldsetType->getAttributeClass();
+		/** @var CollectionAttribute $fieldsetAttribute */
+		$fieldsetAttribute = new $attributeClass();
+		$fieldsetAttribute->setType($fieldsetType);
 
+		$attributeClass = $phoneType->getAttributeClass();
+		$phoneTypeAttribute = new $attributeClass();
+		$phoneTypeAttribute->setValue('+36203727668');
+		$phoneTypeAttribute->setType($phoneType);
+		$fieldsetAttribute->phone = $phoneTypeAttribute;
 
-
+		$data->fieldset = $fieldsetAttribute;
 
 		$formFactory = $container->get('form.factory');
 		$rootForm = $formFactory->createBuilder(new AttributeBasedType($rootType), $data, $rootType->buildFormOptions());
@@ -110,10 +134,9 @@ class TypeBasedFormBuildTest extends KernelTestCase
 		$form = self::buildType($container);
 		$form->submit(array(
 			'username' => 'alma',
-			'checkbox' => true,
+			'checkbox' => false,
 			'id' => 234,
-		));
-		\Doctrine\Common\Util\Debug::dump($form->getData(), 4);
+		), false);
 		$em = $container->get('doctrine.orm.default_entity_manager');
 		$em->persist($form->getData());
 		$em->flush();
