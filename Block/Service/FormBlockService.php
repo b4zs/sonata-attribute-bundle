@@ -5,6 +5,7 @@ namespace Core\AttributeBundle\Block\Service;
 
 
 use Application\BannerBundle\Entity\BannerLog;
+use Core\AttributeBundle\Entity\FormSubmission;
 use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Enum\FormTypesEnum;
 use Core\AttributeBundle\Form\AttributeBasedType;
@@ -71,9 +72,14 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 
 		if ($form->isSubmitted()) {
 			if ($form->isValid()) {
-				$formData = $form->getData();
 				$entityManager = $this->getEntityManager();
-				$entityManager->persist($formData);
+
+				$formData = $form->getData();
+				$submission = new FormSubmission();
+				$submission->setType($blockContext->getBlock()->getSetting('user_form'));
+				$submission->setCollection($formData);
+
+				$entityManager->persist($submission);
 				$entityManager->flush();
 
 				$messages[] = array(
