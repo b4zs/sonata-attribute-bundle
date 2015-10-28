@@ -6,6 +6,7 @@ namespace Core\AttributeBundle\Admin;
 use Core\AdminBundle\Form\Type\ActionsType;
 use Core\AttributeBundle\Entity\Attribute;
 use Core\AttributeBundle\Entity\Type;
+use Core\AttributeBundle\Enum\FormTypesEnum;
 use Core\AttributeBundle\Form\AttributeBasedType;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Knp\Menu\MenuItem;
@@ -71,6 +72,7 @@ class TypeAdmin extends Admin
             $isChildrenTableForm = $associationMapping['fieldName'] === 'children';
         }
 
+        $object = $this->getSubject();
 
         $formMapper
             ->with('General', array('class' => 'col-md-6'))
@@ -88,9 +90,13 @@ class TypeAdmin extends Admin
                 'choices' => $this->getAvailableFormTypes(),
             ))
             ->end()->with('Form options', array('class' => 'col-md-6'))
-            ->add('formOptions', 'yaml_array')
-            ->add('parent', 'sonata_type_model_list')
-            ->end()
+            ->add('formOptions', 'yaml_array');
+
+        if($object->getFormType() != FormTypesEnum::FORM){
+            $formMapper->add('parent', 'sonata_type_model_list');
+        }
+
+        $formMapper->end()
         ;
     }
 
@@ -122,15 +128,7 @@ class TypeAdmin extends Admin
 
     private function getAvailableFormTypes()
     {
-        $types = array(
-            'form',
-            'text',
-            'textarea',
-            'integer',
-            'checkbox'
-        );
-
-        return array_combine($types, $types);
+        return FormTypesEnum::getChoices();
     }
 
     public function getPresets()
@@ -166,15 +164,10 @@ class TypeAdmin extends Admin
         return $object;
     }
 
-    public function getSubject()
-    {
-        return parent::getSubject();
-    }
-
     public function toString($object)
     {
         if ($object instanceof Type && $object->getId()) {
-            return $object->getName();
+            return $object->getLabel();
         } else {
             return parent::toString($object);
         }
@@ -251,98 +244,114 @@ class TypeAdmin extends Admin
 
     protected function configureTabMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {
-        list($subject, $parent, $isCollection) = $this->detectContext();
+//        list($subject, $parent, $isCollection) = $this->detectContext();
+//
+//        if ($parent) {
+//            if ('edit' === $action && $subject) {
+//                $menu->addChild('back_to_parent', array(
+//                    'uri' => $this->generateUrl('list', array('parent' => $parent->getId(), 'uniqid' => null,)),
+//                    'label' => '« Fields of '.json_encode($parent->getName()),
+//                ));
+//            } else {
+//                $menu->addChild('back_to_parent', array(
+//                    'uri' => $this->generateUrl('edit', array('id' => $parent->getId(), 'parent' => null, 'uniqid' => null,)),
+//                    'label' => '« Edit '.json_encode($parent->getName()),
+//                ));
+//            }
+//        }
+//
+//        if ('edit' === $action && $isCollection) {
+//            $menu->addChild('child_forms', array(
+//                'uri'       => $this->generateUrl('list', array('parent' => $subject->getId())),
+//                'label'     => 'Fields of '.json_encode($subject->getName()).' »',
+//            ));
+//        }
 
-        if ($parent) {
-            if ('edit' === $action && $subject) {
-                $menu->addChild('back_to_parent', array(
-                    'uri' => $this->generateUrl('list', array('parent' => $parent->getId(), 'uniqid' => null,)),
-                    'label' => '« Fields of '.json_encode($parent->getName()),
-                ));
-            } else {
-                $menu->addChild('back_to_parent', array(
-                    'uri' => $this->generateUrl('edit', array('id' => $parent->getId(), 'parent' => null, 'uniqid' => null,)),
-                    'label' => '« Edit '.json_encode($parent->getName()),
+        if($this->getSubject() && $this->getSubject()->getId()) {
+
+            /** @var FormSubmissionAdmin $formSubmissionAdmin */
+            $formSubmissionAdmin = $this->getRoot()->getChild('core_attribute.admin.form_submission');
+            if ($formSubmissionAdmin && $formSubmissionAdmin->isGranted('LIST')) {
+//            $parameter = $parent?array('id' => $parent->getId()):array();
+                $submissionsListUrl = $formSubmissionAdmin->generateUrl('list', $parameter = array());
+
+                $menu->addChild('submissions', array(
+                    'uri' => $submissionsListUrl,
+                    'label' => sprintf('Submissions of %s', $this->getSubject()->getLabel()),
                 ));
             }
         }
-
-        if ('edit' === $action && $isCollection) {
-            $menu->addChild('child_forms', array(
-                'uri'       => $this->generateUrl('list', array('parent' => $subject->getId())),
-                'label'     => 'Fields of '.json_encode($subject->getName()).' »',
-            ));
-        }
-
 
     }
 
     public function buildBreadcrumbs($action, MenuItemInterface $menu = null)
     {
-        /** @var MenuItem $result */
-        $result = parent::buildBreadcrumbs($action, $menu);
-        $this->resetListBreadcrumbItemUri($result);
+        return parent::buildBreadcrumbs($action, $menu);
 
-        list($subject, $parent, $isCollection) = $this->detectContext();
-
-
-        if ($subject || $parent) {
-            /** @var Type $currentType */
-            if ($this->getSubject()) {
-                $currentType = $this->getSubject();
-                $menu = $this->breadcrumbs[$action]->getParent();
-            } else {
-                $currentType = $parent;
-                $menu = $this->breadcrumbs[$action];
-            }
-
-            /** @var Type $pathType */
-            foreach ($currentType->buildPath() as $pathType) {
-                $menu = $menu->addChild(
-                    $pathType->getId() ? $pathType->getName() : '+',
-                    array('uri' => $pathType->getId() ? $this->generateObjectUrl('edit', $pathType) : null)
-                );
-            }
-
-            if ($parent && !$this->getSubject()) { // subfield listing
-                $menu = $menu->addChild(
-                    'Fields',
-                    array('uri' => $this->generateUrl('list', array('parent' => $parent->getId())))
-                );
-            }
-
-            $result = $menu;
-        }
-
-        return $result;
+//        /** @var MenuItem $result */
+//        $result = parent::buildBreadcrumbs($action, $menu);
+//        $this->resetListBreadcrumbItemUri($result);
+//
+//        list($subject, $parent, $isCollection) = $this->detectContext();
+//
+//
+//        if (($subject && $subject instanceof Attribute) || $parent) {
+//            /** @var Type $currentType */
+//            if ($this->getSubject()) {
+//                $currentType = $this->getSubject();
+//                $menu = $this->breadcrumbs[$action]->getParent();
+//            } else {
+//                $currentType = $parent;
+//                $menu = $this->breadcrumbs[$action];
+//            }
+//
+//            /** @var Type $pathType */
+//            foreach ($currentType->buildPath() as $pathType) {
+//                $menu = $menu->addChild(
+//                    $pathType->getId() ? $pathType->getName() : '+',
+//                    array('uri' => $pathType->getId() ? $this->generateObjectUrl('edit', $pathType) : null)
+//                );
+//            }
+//
+//            if ($parent && !$this->getSubject()) { // subfield listing
+//                $menu = $menu->addChild(
+//                    'Fields',
+//                    array('uri' => $this->generateUrl('list', array('parent' => $parent->getId())))
+//                );
+//            }
+//
+//            $result = $menu;
+//        }
+//
+//        return $result;
     }
 
-    protected function detectContext()
-    {
-        $subject = null;
-        /** @var Type $parent */
-        $parent = null;
-        $isCollection = false;
+//    protected function detectContext()
+//    {
+//        $subject = null;
+//        /** @var Type $parent */
+//        $parent = null;
+//        $isCollection = false;
+//
+//        if ($this->getSubject()) {
+//            $subject = $this->getSubject();
+//            $isCollection = $subject->getFormType() === FormTypesEnum::FORM;
+//            $parent = $subject->getParent();
+//            return array($subject, $parent, $isCollection);
+//        } elseif ($parentId = $this->getPersistentParameter('parent')) {
+//            $parent = $this->getModelManager()->find($this->getClass(), $parentId);
+//            return array($subject, $parent, $isCollection);
+//        }
+//
+//        return array($subject, $parent, $isCollection);
+//    }
 
-        if ($this->getSubject()) {
-            $subject = $this->getSubject();
-            $isCollection = $subject->getFormType() === 'form';
-            $parent = $subject->getParent();
-            return array($subject, $parent, $isCollection);
-        } elseif ($parentId = $this->getPersistentParameter('parent')) {
-            $parent = $this->getModelManager()->find($this->getClass(), $parentId);
-            return array($subject, $parent, $isCollection);
-        }
-
-        return array($subject, $parent, $isCollection);
-    }
-
-    public function getParentType()
-    {
-        list($subject, $parent, $isCollection) = $this->detectContext();
-
-        return $parent;
-    }
+//    public function getParentType()
+//    {
+//        list($subject, $parent, $isCollection) = $this->detectContext();
+//
+//        return $parent;
+//    }
 
     public function generateUrl($name, array $parameters = array(), $absolute = false)
     {

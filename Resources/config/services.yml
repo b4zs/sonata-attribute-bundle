@@ -5,14 +5,18 @@ services:
     core_attribute.admin.type:
         class: Core\AttributeBundle\Admin\TypeAdmin
         arguments: [~, Core\AttributeBundle\Entity\Type, CoreAttributeBundle:TypeAdmin]
+        calls:
+            - [addChild, [@core_attribute.admin.form_submission]]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: admin, label: Type}
+            - {name: sonata.admin, manager_type: orm, group: Form, label: Collections}
 
-    core_attribute.admin.attribute:
-        class: Core\AttributeBundle\Admin\AttributeAdmin
-        arguments: [~, Core\AttributeBundle\Entity\Attribute, CoreAttributeBundle:AttributeAdmin]
+    core_attribute.admin.form_submission:
+        class: Core\AttributeBundle\Admin\FormSubmissionAdmin
+        arguments: [~, Core\AttributeBundle\Entity\FormSubmission, CoreAttributeBundle:FormSubmissionAdmin]
+        calls:
+            - [setContainer, ['@service_container']]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: admin, label: Attribute}
+            - {name: sonata.admin, manager_type: orm, group: Form, label: Results, show_in_dashboard: false}
 
     core_attribute.block.service.form:
         class: Core\AttributeBundle\Block\Service\FormBlockService
