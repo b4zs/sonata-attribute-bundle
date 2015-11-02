@@ -26,34 +26,36 @@ class TypeAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
             ->add('name')
             ->add('label')
-            ->add('position')
-            ->add('attributeClass')
-            ->add('valueClass')
-            ->add('formType')
-            ->add('formOptions')
         ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-//            ->addIdentifier('id')
-            ->addIdentifier('name')
-            ->add('label')
-//            ->add('position')
-//            ->add('attributeClass')
-//            ->add('valueClass')
-            ->add('formType')
-            ->add('formOptions', null, array(
-                'template' => 'CoreAttributeBundle:TypeAdmin:list_yaml_field.html.twig',
-            ))
-//            ->add('parent')
+            ->add('name')
+            ->add('label');
+
+        if($this->getPersistentParameter('parent')){
+            $listMapper
+                ->add('formType')
+                ->add('formOptions', null, array(
+                    'template' => 'CoreAttributeBundle:TypeAdmin:list_yaml_field.html.twig',
+                ));
+        }
+
+        $listMapper
             ->add('_action', 'actions', array(
                 'actions' => array(
+                    'edit' => array(),
                     'delete' => array(),
+                    'fields' => array(
+                        'template' => 'CoreAttributeBundle:TypeAdmin:list__action_fields.html.twig'
+                    ),
+                    'submissions' => array(
+                        'template' => 'CoreAttributeBundle:TypeAdmin:list__action_submissions.html.twig'
+                    ),
                 )
             ))
         ;
@@ -265,9 +267,9 @@ class TypeAdmin extends Admin
                 if ($this->isGranted('LIST')) {
                     $typeAdminUrl = $this->generateUrl('list', array('parent' =>  $subject->getId()));
 
-                    $menu->addChild('inputs', array(
+                    $menu->addChild('fields', array(
                         'uri' => $typeAdminUrl,
-                        'label' => sprintf('Inputs of %s', $subject->getLabel()?:$subject->getName()),
+                        'label' => sprintf('Fields of %s', $subject->getLabel()?:$subject->getName()),
                     ));
                 }
             }

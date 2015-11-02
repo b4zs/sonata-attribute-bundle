@@ -1,0 +1,8 @@
+{% if admin.isGranted('LIST', object) and admin.hasRoute('list') and object.parent is null%}
+    {% set persistentParameters = admin.getPersistentParameters() %}
+    {% set routeParams = { parent: object.id }|merge(persistentParameters) %}
+    <a href="{{ admin.generateUrl('list', routeParams) }}" class="btn btn-sm btn-default delete_link" title="{{ 'action_fields'|trans }}">
+        <i class="glyphicon glyphicon-tasks"></i>
+        {{ 'action_fields'|trans }}
+    </a>
+{% endif %}
