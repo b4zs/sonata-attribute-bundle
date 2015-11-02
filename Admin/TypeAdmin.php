@@ -50,11 +50,11 @@ class TypeAdmin extends Admin
                 'actions' => array(
                     'edit' => array(),
                     'delete' => array(),
-                    'fields' => array(
-                        'template' => 'CoreAttributeBundle:TypeAdmin:list__action_fields.html.twig'
-                    ),
                     'submissions' => array(
                         'template' => 'CoreAttributeBundle:TypeAdmin:list__action_submissions.html.twig'
+                    ),
+                    'fields' => array(
+                        'template' => 'CoreAttributeBundle:TypeAdmin:list__action_fields.html.twig'
                     ),
                 )
             ))
@@ -91,7 +91,7 @@ class TypeAdmin extends Admin
             ->end()->with('Form options', array('class' => 'col-md-6'))
             ->add('formOptions', 'yaml_array');
 
-        if($object->getFormType() != FormTypesEnum::FORM){
+        if($this->getPersistentParameter('parent')){
             $formMapper->add('parent', 'sonata_type_model_list');
         }
 

@@ -1,8 +1,9 @@
-{% if admin.isGranted('LIST', object) and admin.hasRoute('list') and object.parent is null%}
-    {% set persistentParameters = admin.getPersistentParameters() %}
-    {% set routeParams = { parent: object.id }|merge(persistentParameters) %}
-    <a href="{{ admin.generateUrl('list', routeParams) }}" class="btn btn-sm btn-default delete_link" title="{{ 'action_fields'|trans }}">
-        <i class="glyphicon glyphicon-tasks"></i>
-        {{ 'action_fields'|trans }}
-    </a>
+{% if(admin.root.child('core_attribute.admin.form_submission') is defined) %}
+    {% set formSubmissionAdmin = admin.root.child('core_attribute.admin.form_submission') %}
+    {% if formSubmissionAdmin.isGranted('LIST', object) and formSubmissionAdmin.hasRoute('list') and object.parent is null%}
+        <a href="{{ formSubmissionAdmin.generateObjectUrl('list', object) }}" class="btn btn-sm btn-default delete_link" title="{{ 'action_form_submissions'|trans }}">
+            <i class="glyphicon glyphicon-list"></i>
+            {{ 'action_form_submissions'|trans }}
+        </a>
+    {% endif %}
 {% endif %}
