@@ -9,11 +9,12 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\DependencyInjection\Container;
 
 class FormSubmissionAdmin extends Admin
 {
+
+    protected $parentAssociationMapping = 'type';
 
     /** @var Container */
     private $container;
@@ -46,6 +47,7 @@ class FormSubmissionAdmin extends Admin
     {
         $listMapper
             ->add('collection.type.label')
+            ->add('createdAt')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -84,8 +86,6 @@ class FormSubmissionAdmin extends Admin
     public function createQuery($context = 'list')
     {
         $query = parent::createQuery($context);
-//        $query->addGroupBy('o.collection');
-
         return $query;
     }
 
