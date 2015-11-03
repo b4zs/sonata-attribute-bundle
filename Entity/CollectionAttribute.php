@@ -44,18 +44,10 @@ class CollectionAttribute extends Attribute
 
 	function __set($name, $value)
 	{
-//		var_dump(array('method' => __FUNCTION__, 'args' => func_get_args()));
-
 		if ($value instanceof Attribute) {
 			if ($name !== $value->getType()->getName()) {
 				throw new \RuntimeException('property name and attribute.type.name differs');
 			}
-
-			var_dump(array(
-				$this->getType()->getName(),
-				$value->getType()->getName(),
-				$value->getValue()
-			));
 
 			foreach($this->getValue() as $key => $child){
 				if($child->getType()->getName() == $value->getType()->getName()){
