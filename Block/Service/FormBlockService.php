@@ -131,10 +131,14 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 
 	protected function reverseTransformSettings(array $settings)
 	{
+		if(!is_int($settings['user_form'])){
+			throw new \RuntimeException('Form id must be a valid integer');
+		}
+
 		$settings['user_form'] = $this->container->get('doctrine.orm.entity_manager')
 			->getRepository('CoreAttributeBundle:Type')->find($settings['user_form']);
 
-		if(!$settings['user_form'] instanceof Type || $settings['user_form']->getFormType() !== 'form'){
+		if(!$settings['user_form'] instanceof Type /*|| $settings['user_form']->getFormType() !== 'form'*/){
 			throw new \RuntimeException('Form can not be found');
 		}
 

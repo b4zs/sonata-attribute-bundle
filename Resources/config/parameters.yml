@@ -1,0 +1,55 @@
+parameters:
+    dynamic_form_types:
+        #base fields
+        dynamic_form: core_attribute.form.type.dynamic_form_type
+        #text fields
+        dynamic_text: core_attribute.form.type.dynamic_text_type
+        dynamic_textarea: core_attribute.form.type.dynamic_textarea_type
+        dynamic_email: core_attribute.form.type.dynamic_email_type
+        dynamic_integer: core_attribute.form.type.dynamic_integer_type
+        dynamic_number: core_attribute.form.type.dynamic_number_type
+        dynamic_money: core_attribute.form.type.dynamic_money_type
+        dynamic_url: core_attribute.form.type.dynamic_url_type
+        #choice fields
+        #date and time fields
+        #other
+        #field groups
+
+
+    dynamic_attribute_classes.collection: Core\AttributeBundle\Entity\CollectionAttribute
+    dynamic_attribute_classes.string: Core\AttributeBundle\Entity\StringAttribute
+    dynamic_attribute_classes.integer: Core\AttributeBundle\Entity\IntegerAttribute
+    dynamic_attribute_classes.boolean: Core\AttributeBundle\Entity\BooleanAttribute
+
+
+#    attribute_classes:
+#        collection: Core\AttributeBundle\Entity\CollectionAttribute,
+#        boolean: Core\AttributeBundle\Entity\BooleanAttribute,
+#        integer: Core\AttributeBundle\Entity\IntegerAttribute,
+#        string: Core\AttributeBundle\Entity\StringAttribute,
+#
+#    form_options:
+#        form: []
+#        text:
+#            max_length: 255
+#        textarea: []
+#        integer: []
+#        checkbox: []
+#
+#    types:
+#        form:
+#            attribute_class: attribute_classes.collection
+#            value_class: %attribute_classes.collection%
+#            form_options: [ %form_options.form% ]
+#        text:
+#            attribute_class: %attribute_classes.string%
+#            value_class: %attribute_classes.string%
+#            form_options: [ %form_options.text%, %form_options.textarea% ]
+#        integer:
+#            attribute_class: %attribute_classes.integer%
+#            value_class: %attribute_classes.integer%
+#            form_options: [ %form_options.integer% ]
+#        boolean:
+#            attribute_class: %attribute_classes.boolean%
+#            value_class: %attribute_classes.boolean%
+#            form_options: [ %form_options.checkbox% ]

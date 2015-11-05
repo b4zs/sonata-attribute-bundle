@@ -1,3 +1,6 @@
+imports:
+    - { resource: parameters.yml }
+
 services:
 #    core_attribute.example:
 #        class: Core\AttributeBundle\Example
@@ -27,3 +30,60 @@ services:
             - [setContainer, ['@service_container']]
         tags:
             - { name: sonata.block }
+
+    ### Dynamic form types ###
+    core_attribute.form.type.dynamic_form_type:
+        class: Core\AttributeBundle\Form\Type\DynamicFormType
+        arguments:
+            - %dynamic_attribute_classes.collection%
+        tags:
+            - { name: form.type, alias: dynamic_form }
+
+    core_attribute.form.type.dynamic_text_type:
+        class: Core\AttributeBundle\Form\Type\DynamicTextType
+        arguments:
+            - %dynamic_attribute_classes.string%
+        tags:
+            - { name: form.type, alias: dynamic_text }
+
+    core_attribute.form.type.dynamic_textarea_type:
+        class: Core\AttributeBundle\Form\Type\DynamicTextareaType
+        arguments:
+            - %dynamic_attribute_classes.string%
+        tags:
+            - { name: form.type, alias: dynamic_textarea }
+
+    core_attribute.form.type.dynamic_email_type:
+        class: Core\AttributeBundle\Form\Type\DynamicEmailType
+        arguments:
+            - %dynamic_attribute_classes.string%
+        tags:
+            - { name: form.type, alias: dynamic_email }
+
+    core_attribute.form.type.dynamic_integer_type:
+        class: Core\AttributeBundle\Form\Type\DynamicIntegerType
+        arguments:
+            - %dynamic_attribute_classes.integer%
+        tags:
+            - { name: form.type, alias: dynamic_integer }
+
+    core_attribute.form.type.dynamic_number_type:
+        class: Core\AttributeBundle\Form\Type\DynamicNumberType
+        arguments:
+            - %dynamic_attribute_classes.integer% #todo implement float attribute class
+        tags:
+            - { name: form.type, alias: dynamic_number }
+
+    core_attribute.form.type.dynamic_money_type:
+        class: Core\AttributeBundle\Form\Type\DynamicMoneyType
+        arguments:
+            - %dynamic_attribute_classes.string%
+        tags:
+            - { name: form.type, alias: dynamic_money }
+
+    core_attribute.form.type.dynamic_url_type:
+        class: Core\AttributeBundle\Form\Type\DynamicUrlType
+        arguments:
+            - %dynamic_attribute_classes.string%
+        tags:
+            - { name: form.type, alias: dynamic_url }

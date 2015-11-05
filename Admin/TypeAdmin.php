@@ -6,6 +6,8 @@ namespace Core\AttributeBundle\Admin;
 use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Enum\FormTypesEnum;
 use Core\AttributeBundle\Form\AttributeBasedType;
+use Core\AttributeBundle\Form\Type\DynamicFormTypeInterface;
+use Core\AttributeBundle\Form\FormOptionsType;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -17,11 +19,6 @@ use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 
 class TypeAdmin extends Admin
 {
-    const ATTR_ATTR         = 'Core\\AttributeBundle\\Entity\\Attribute';
-    const ATTR_COLLECTION   = 'Core\\AttributeBundle\\Entity\\CollectionAttribute';
-    const ATTR_STRING       = 'Core\\AttributeBundle\\Entity\\StringAttribute';
-    const ATTR_INTEGER      = 'Core\\AttributeBundle\\Entity\\IntegerAttribute';
-    const ATTR_BOOLEAN      = 'Core\\AttributeBundle\\Entity\\BooleanAttribute';
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
@@ -78,21 +75,24 @@ class TypeAdmin extends Admin
             ->add('name')
             ->add('label', null, array(
                 'required' => false,
-            ))
-            ->add('attributeClass', 'choice', array(
-                'choices' => $this->fetchAttributeClassChoices(),
-            ))
+            ));
+
+        if($object && $object->getFormType() != 'dynamic_form'){
+            $formMapper->add('parent', 'sonata_type_model_list');
+        }
+
+        $formMapper->add('attributeClass', 'text', array())
             ->add('valueClass', 'text', array(
                 'required' => false,
             ))
             ->add('formType', 'choice', array(
                 'choices' => $this->getAvailableFormTypes(),
             ))
-            ->end()->with('Form options', array('class' => 'col-md-6'))
-            ->add('formOptions', 'yaml_array');
+            ->end();
 
-        if($this->getPersistentParameter('parent')){
-            $formMapper->add('parent', 'sonata_type_model_list');
+        if($object && $object->getFormType()){
+            $formMapper->with('Form options', array('class' => 'col-md-6'))
+                ->add('formOptions', new FormOptionsType($object->buildFormOptions(), $object->getFormType()));
         }
 
         $formMapper->end()
@@ -113,42 +113,33 @@ class TypeAdmin extends Admin
         ;
     }
 
-    private function fetchAttributeClassChoices()
-    {
-        $entityManager = $this->configurationPool->getContainer()->get('doctrine.orm.entity_manager');
-        $classMetadata = $entityManager->getClassMetadata(self::ATTR_ATTR);
-        $choices = $classMetadata->discriminatorMap;
-        unset($choices['attribute']);
-
-        $choices = array_map(function($t){ return str_replace('attribute', '', $t);}, array_flip($choices));
-
-        return $choices;
-    }
-
     private function getAvailableFormTypes()
     {
-        return FormTypesEnum::getChoices();
+        $container = $this->getConfigurationPool()->getContainer();
+        $types = array_keys($container->getParameter('dynamic_form_types'));
+
+        return array_combine($types, $types);
     }
 
-    public function getPresets()
-    {
-        return array(
-            'form'      => Type::create('', '', self::ATTR_COLLECTION, self::ATTR_COLLECTION, 'form', array()),
-            'text'      => Type::create('', '', self::ATTR_STRING, null, 'text', array()),
-            'integer'   => Type::create('', '', self::ATTR_INTEGER, null, 'integer', array()),
-            'boolean'   => Type::create('', '', self::ATTR_BOOLEAN, null, 'checkbox', array('required' => false,)),
-        );
+    public function getObject($id){
+        $object = parent::getObject($id);
+
+        if($object && $object->getFormType()){
+            $formType = $this->getFormType($object->getFormType());
+            $object->setFormOptions(array_replace_recursive($formType->getOptions(), $object->buildFormOptions()));
+        }
+
+        return $object;
     }
 
     public function getNewInstance()
     {
         if ($this->hasRequest() && $preset = $this->getRequest()->get('preset')) {
-            $presets = $this->getPresets();
-            if (isset($presets[$preset])) {
-                $object = $presets[$preset];
-                foreach ($this->getExtensions() as $extension) {
-                    $extension->alterNewInstance($this, $object);
-                }
+            $formType = $this->getFormType($preset);
+            $formTypeOptions = $formType->getOptions();
+            $object = Type::create('', isset($formTypeOptions['label'])?$formTypeOptions['label']:'', $formTypeOptions['attribute_class'], $formTypeOptions['value_class'], $formType->getName(), $formTypeOptions);
+            foreach ($this->getExtensions() as $extension) {
+                $extension->alterNewInstance($this, $object);
             }
         } else {
             return parent::getNewInstance();
@@ -213,7 +204,7 @@ class TypeAdmin extends Admin
         $d = parent::getPersistentParameters();
 
         $request = $this->getRequest();
-        $params = array('uniqid', 'code', 'pcode', 'puniqid','parent');
+        $params = array('uniqid', 'code', 'pcode', 'puniqid','parent', /*'preset'*/);
         foreach ($params as $key) {
             if ($val = $request->get($key)) {
                 $d[$key] = $val;
@@ -326,5 +317,34 @@ class TypeAdmin extends Admin
         $listItem->setUri($this->generateUrl('list', array('parent' => null,)));
         return $listItem;
     }
+
+    /**
+     * @param string $type
+     * @return DynamicFormTypeInterface|mixed
+     */
+    private function getFormType($type)
+    {
+
+        //todo error handling: undefined type
+
+        $container = $this->getConfigurationPool()->getContainer();
+
+        $formType = $container->getParameter('dynamic_form_types');
+        /** @var DynamicFormTypeInterface $formType */
+        $formType = $container->get($formType[$type]);
+        return $formType;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateUrl($name, array $parameters = array(), $absolute = false)
+    {
+        if($name == "create" && isset($parameters['uniqid']) && $this->hasRequest() && $preset = $this->getRequest()->get('preset')){
+            $parameters = array_merge(array('preset' => $preset), $parameters);
+        }
+        return parent::generateUrl($name, $parameters, $absolute);
+    }
+
 
 }
