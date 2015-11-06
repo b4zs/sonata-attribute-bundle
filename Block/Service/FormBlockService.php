@@ -4,18 +4,13 @@
 namespace Core\AttributeBundle\Block\Service;
 
 
-use Application\BannerBundle\Entity\BannerLog;
 use Core\AttributeBundle\Entity\FormSubmission;
 use Core\AttributeBundle\Entity\Type;
-use Core\AttributeBundle\Enum\FormTypesEnum;
 use Core\AttributeBundle\Form\AttributeBasedType;
 use Core\BlockBundle\Block\Service\BaseTransformedSettingsBlockService;
-use Doctrine\Common\Collections\ArrayCollection;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\BlockBundle\Block\BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Model\BlockInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -41,7 +36,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 					'query_builder' => function($repository){
 						return $repository->createQueryBuilder('type')
 							->where('type.formType = :formType')
-							->setParameter('formType', FormTypesEnum::FORM);
+							->setParameter('formType', 'form');
 					},
 				)),
 				array('template', 'choice', array(

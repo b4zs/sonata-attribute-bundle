@@ -4,10 +4,7 @@ namespace Core\AttributeBundle\Admin;
 
 
 use Core\AttributeBundle\Entity\Type;
-use Core\AttributeBundle\Enum\FormTypesEnum;
 use Core\AttributeBundle\Form\AttributeBasedType;
-use Core\AttributeBundle\Form\Type\DynamicFormTypeInterface;
-use Core\AttributeBundle\Form\FormOptionsType;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Admin\AdminInterface;

@@ -3,10 +3,8 @@
 namespace Core\AttributeBundle\Form;
 
 use Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain;
-use Core\AttributeBundle\Utils\FormOptionFormTypResolverInterface;
 use Core\AttributeBundle\Utils\FormOptionFormTypResolver;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 

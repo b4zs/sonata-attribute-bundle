@@ -4,7 +4,6 @@ namespace Core\AttributeBundle\Controller;
 
 use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Form\AttributeBasedType;
-use Core\AttributeBundle\Tests\TypeBasedFormBuildTest;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
