@@ -3,7 +3,7 @@
 namespace Core\AttributeBundle\Controller;
 
 use Core\AttributeBundle\Entity\Type;
-use Core\AttributeBundle\Form\AttributeBasedType;
+use Core\AttributeBundle\Form\DynamicFormType;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -36,7 +36,7 @@ class DefaultController extends Controller
             throw new BadRequestHttpException('Neither id nor type was defined, thus unable to create form');
         }
 
-        $form = $this->createForm(new AttributeBasedType($type), $data);
+        $form = $this->createForm(new DynamicFormType($type), $data);
 
         $form->handleRequest($request);
         if ($form->isSubmitted()) {

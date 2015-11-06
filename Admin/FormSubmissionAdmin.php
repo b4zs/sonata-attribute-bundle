@@ -3,7 +3,7 @@
 namespace Core\AttributeBundle\Admin;
 
 use Core\AttributeBundle\Entity\FormSubmission;
-use Core\AttributeBundle\Form\AttributeBasedType;
+use Core\AttributeBundle\Form\DynamicFormType;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -92,7 +92,7 @@ class FormSubmissionAdmin extends Admin
     private function createFormType()
     {
         $rootType = $this->getSubject()->getType();
-        $rootType = new AttributeBasedType($rootType);
+        $rootType = new DynamicFormType($rootType);
         return $rootType;
     }
 

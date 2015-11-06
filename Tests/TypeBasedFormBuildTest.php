@@ -7,7 +7,7 @@ namespace Core\AttributeBundle\Tests;
 use Core\AttributeBundle\Entity\BooleanAttribute;
 use Core\AttributeBundle\Entity\CollectionAttribute;
 use Core\AttributeBundle\Entity\Type;
-use Core\AttributeBundle\Form\AttributeBasedType;
+use Core\AttributeBundle\Form\DynamicFormType;
 use Core\AttributeBundle\Form\DataTransformer\AttributeToValueTransformer;
 use Core\ToolsBundle\Tests\ContainerAwareTest;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -118,7 +118,7 @@ class TypeBasedFormBuildTest extends KernelTestCase
 		$data->fieldset = $fieldsetAttribute;
 
 		$formFactory = $container->get('form.factory');
-		$rootForm = $formFactory->createBuilder(new AttributeBasedType($rootType), $data, $rootType->buildFormOptions());
+		$rootForm = $formFactory->createBuilder(new DynamicFormType($rootType), $data, $rootType->buildFormOptions());
 
 		return $rootForm->getForm();
 	}

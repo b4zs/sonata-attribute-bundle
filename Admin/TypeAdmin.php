@@ -4,7 +4,7 @@ namespace Core\AttributeBundle\Admin;
 
 
 use Core\AttributeBundle\Entity\Type;
-use Core\AttributeBundle\Form\AttributeBasedType;
+use Core\AttributeBundle\Form\DynamicFormType;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -166,7 +166,7 @@ class TypeAdmin extends Admin
     {
         $containerInterface = $this->getConfigurationPool()->getContainer();
         $formFactory = $containerInterface->get('form.factory');
-        $form = $formFactory->create(new AttributeBasedType($type), $data, $options);
+        $form = $formFactory->create(new DynamicFormType($type), $data, $options);
 
         if ($this->hasRequest()) {
             $form->handleRequest($this->getRequest());

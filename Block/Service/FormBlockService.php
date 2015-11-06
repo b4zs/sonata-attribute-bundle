@@ -6,7 +6,7 @@ namespace Core\AttributeBundle\Block\Service;
 
 use Core\AttributeBundle\Entity\FormSubmission;
 use Core\AttributeBundle\Entity\Type;
-use Core\AttributeBundle\Form\AttributeBasedType;
+use Core\AttributeBundle\Form\DynamicFormType;
 use Core\BlockBundle\Block\Service\BaseTransformedSettingsBlockService;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\BlockBundle\Block\BlockContextInterface;
@@ -185,7 +185,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 			),
 			$rootFormOptions);
 
-		$rootForm = $formFactory->createBuilder(new AttributeBasedType($rootType), null, $rootFormOptions)->getForm();
+		$rootForm = $formFactory->createBuilder(new DynamicFormType($rootType), null, $rootFormOptions)->getForm();
 		return $rootForm;
 	}
 } 

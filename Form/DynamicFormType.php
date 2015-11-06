@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-class AttributeBasedType extends AbstractType
+class DynamicFormType extends AbstractType
 {
 	/** @var Type */
 	private $type;
@@ -30,7 +30,7 @@ class AttributeBasedType extends AbstractType
 			$name = $child->getName();
 			$childData = $pa === null ? null : $pa->getValue($data, $name);
 
-			$builder->add($name, new AttributeBasedType($child), array(
+			$builder->add($name, new DynamicFormType($child), array(
 				'data'  => $childData,
 			));
 		}

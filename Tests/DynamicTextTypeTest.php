@@ -2,7 +2,7 @@
 namespace Core\AttributeBundle\Tests;
 
 use Core\AttributeBundle\Entity\Type;
-use Core\AttributeBundle\Form\AttributeBasedType;
+use Core\AttributeBundle\Form\DynamicFormType;
 use Core\AttributeBundle\Form\Type\DynamicTextType;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -91,7 +91,7 @@ class DynamicTextTypeTest extends KernelTestCase{
 
         $type = Type::create('', '', $type->getOptions()['attribute_class'], $type->getOptions()['value_class'], $type->getName(), $this->formOptions);
 
-        $rootFormType = new AttributeBasedType($type);
+        $rootFormType = new DynamicFormType($type);
 
         $form = $this->formFactory->create($rootFormType);
 

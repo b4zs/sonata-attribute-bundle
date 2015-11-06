@@ -1,7 +1,7 @@
 <?php
 namespace Core\AttributeBundle\Tests;
 
-use Core\AttributeBundle\Form\AttributeBasedType;
+use Core\AttributeBundle\Form\DynamicFormType;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Validator\Constraints\Collection;
@@ -44,7 +44,7 @@ class FormSubmissionTest extends KernelTestCase{
         }
 
         $rootFormOptions = $rootType->buildFormOptions();
-        $rootForm = $this->formFactory->createBuilder(new AttributeBasedType($rootType), null, $rootFormOptions)->getForm();
+        $rootForm = $this->formFactory->createBuilder(new DynamicFormType($rootType), null, $rootFormOptions)->getForm();
 
         $rootForm->submit(array(
             'alma' => "BARACK",
