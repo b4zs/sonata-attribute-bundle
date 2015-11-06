@@ -21,7 +21,7 @@ Core\AttributeBundle\Entity\Type:
         attributeClass:
             type:     string
             length:   255
-        valueClass:
+        dataClass:
             type:     string
             length:   255
             nullable: true

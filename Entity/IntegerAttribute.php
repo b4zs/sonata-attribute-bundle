@@ -26,11 +26,6 @@ class IntegerAttribute extends Attribute
 		$this->integerValue = $value;
 	}
 
-	protected function getValueType()
-	{
-		return 'numeric';
-	}
-
 	public function assertValue($value)
 	{
 		if ($value && false === filter_var($value, FILTER_VALIDATE_INT)) {

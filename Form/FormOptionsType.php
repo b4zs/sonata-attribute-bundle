@@ -2,45 +2,43 @@
 
 namespace Core\AttributeBundle\Form;
 
+use Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain;
 use Core\AttributeBundle\Utils\FormOptionFormTypResolverInterface;
 use Core\AttributeBundle\Utils\FormOptionFormTypResolver;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FormOptionsType extends AbstractType{
 
-    /** @var array */
-    private $options;
-
-    /** @var string */
-    private $formType;
-
-    /** @var FormOptionFormTypResolverInterface */
-    private $formOptionResolver;
+    /** @var ProviderChain */
+    private $optionsProviderChain;
 
     /**
-     * FormOptionsType constructor.
-     * @param array $options
-     * @param string $formType
+     * @param ProviderChain $optionsProviderChain
      */
-    public function __construct(array $options, $formType)
+    public function __construct(ProviderChain $optionsProviderChain)
     {
-        $this->options = $options;
-        $this->formType = $formType;
-        $this->formOptionResolver = new FormOptionFormTypResolver();
+        $this->optionsProviderChain = $optionsProviderChain;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        foreach($this->options as $key => $option) {
-            if (!$this->isHiddenOption($key)) {
-                list($child, $type, $childOptions) = $this->formOptionResolver->resolve($key, $this->formType);
+        $formOptionResolver = new FormOptionFormTypResolver();
+
+        $formType = $options['form_type'];
+        $hiddenFields = $options['hidden_option_fields'];
+        $provider = $this->optionsProviderChain->getProvider($formType);
+
+        foreach($provider->getOptions() as $key => $option) {
+            if (!in_array($key, $hiddenFields)) {
+                list($child, $type, $childOptions) = $formOptionResolver->resolve($key, $formType);
                 $builder->add($child, $type, $childOptions);
 
                 if ($key == "attr") {
                     foreach ($option as $attrKey => $attrOption) {
-                        list($child, $type, $childOptions) = $this->formOptionResolver->resolveAttr($attrKey, $this->formType);
+                        list($child, $type, $childOptions) = $formOptionResolver->resolveAttr($attrKey, $formType);
                         $builder->get('attr')->add($child, $type, array('required' => true));
                     }
                 }
@@ -49,20 +47,21 @@ class FormOptionsType extends AbstractType{
         }
     }
 
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'form_type' => null,
+            'hidden_option_fields' => array(
+                'attribute_class',
+                'label',
+                'data_class',
+            )
+        ));
+    }
+
     public function getName()
     {
         return 'form_options';
-    }
-
-    private function isHiddenOption($option){
-        $hiddenOptions = array(
-            'attribute_class',
-            'value_class',
-            'label',
-            'data_class',
-        );
-
-        return in_array($option, $hiddenOptions);
     }
 
 }

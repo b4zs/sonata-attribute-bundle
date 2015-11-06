@@ -1,6 +1,3 @@
-imports:
-    - { resource: parameters.yml }
-
 services:
 #    core_attribute.example:
 #        class: Core\AttributeBundle\Example
@@ -31,59 +28,60 @@ services:
         tags:
             - { name: sonata.block }
 
-    ### Dynamic form types ###
-    core_attribute.form.type.dynamic_form_type:
-        class: Core\AttributeBundle\Form\Type\DynamicFormType
+    ### Form type ###
+    core_attribute.form.form_options:
+        class: Core\AttributeBundle\Form\FormOptionsType
         arguments:
-            - %dynamic_attribute_classes.collection%
+            - @core_attribute.form_type_options_provider.provider_chain
         tags:
-            - { name: form.type, alias: dynamic_form }
+            - { name: form.type, alias: form_options }
 
-    core_attribute.form.type.dynamic_text_type:
-        class: Core\AttributeBundle\Form\Type\DynamicTextType
+    ### Factory ###
+    core_attribute.factory.type:
+        class: Core\AttributeBundle\Factory\TypeFactory
         arguments:
-            - %dynamic_attribute_classes.string%
-        tags:
-            - { name: form.type, alias: dynamic_text }
+            - @core_attribute.form_type_options_provider.provider_chain
 
-    core_attribute.form.type.dynamic_textarea_type:
-        class: Core\AttributeBundle\Form\Type\DynamicTextareaType
-        arguments:
-            - %dynamic_attribute_classes.string%
-        tags:
-            - { name: form.type, alias: dynamic_textarea }
+    ### Form type options provider ###
+    core_attribute.form_type_options_provider.provider_chain:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain
 
-    core_attribute.form.type.dynamic_email_type:
-        class: Core\AttributeBundle\Form\Type\DynamicEmailType
-        arguments:
-            - %dynamic_attribute_classes.string%
+    core_attribute.form_type_options_provider.form:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Form
         tags:
-            - { name: form.type, alias: dynamic_email }
+            - { name: dynamic_form.options_provider, alias: form }
 
-    core_attribute.form.type.dynamic_integer_type:
-        class: Core\AttributeBundle\Form\Type\DynamicIntegerType
-        arguments:
-            - %dynamic_attribute_classes.integer%
+    core_attribute.form_type_options_provider.text:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Text
         tags:
-            - { name: form.type, alias: dynamic_integer }
+            - { name: dynamic_form.options_provider, alias: text }
 
-    core_attribute.form.type.dynamic_number_type:
-        class: Core\AttributeBundle\Form\Type\DynamicNumberType
-        arguments:
-            - %dynamic_attribute_classes.integer% #todo implement float attribute class
+    core_attribute.form_type_options_provider.textarea:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Textarea
         tags:
-            - { name: form.type, alias: dynamic_number }
+            - { name: dynamic_form.options_provider, alias: textarea }
 
-    core_attribute.form.type.dynamic_money_type:
-        class: Core\AttributeBundle\Form\Type\DynamicMoneyType
-        arguments:
-            - %dynamic_attribute_classes.string%
+    core_attribute.form_type_options_provider.email:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Email
         tags:
-            - { name: form.type, alias: dynamic_money }
+            - { name: dynamic_form.options_provider, alias: email }
 
-    core_attribute.form.type.dynamic_url_type:
-        class: Core\AttributeBundle\Form\Type\DynamicUrlType
-        arguments:
-            - %dynamic_attribute_classes.string%
+    core_attribute.form_type_options_provider.integer:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Integer
         tags:
-            - { name: form.type, alias: dynamic_url }
+            - { name: dynamic_form.options_provider, alias: integer }
+
+    core_attribute.form_type_options_provider.money:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Money
+        tags:
+            - { name: dynamic_form.options_provider, alias: money }
+
+    core_attribute.form_type_options_provider.number:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Number
+        tags:
+            - { name: dynamic_form.options_provider, alias: number }
+
+    core_attribute.form_type_options_provider.url:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Url
+        tags:
+            - { name: dynamic_form.options_provider, alias: url }

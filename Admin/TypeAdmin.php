@@ -82,7 +82,7 @@ class TypeAdmin extends Admin
         }
 
         $formMapper->add('attributeClass', 'text', array())
-            ->add('valueClass', 'text', array(
+            ->add('dataClass', 'text', array(
                 'required' => false,
             ))
             ->add('formType', 'choice', array(
@@ -92,7 +92,9 @@ class TypeAdmin extends Admin
 
         if($object && $object->getFormType()){
             $formMapper->with('Form options', array('class' => 'col-md-6'))
-                ->add('formOptions', new FormOptionsType($object->buildFormOptions(), $object->getFormType()));
+                ->add('formOptions', 'form_options', array(
+                    'form_type' => $object->getFormType(),
+                ));
         }
 
         $formMapper->end()
@@ -107,7 +109,7 @@ class TypeAdmin extends Admin
             ->add('label')
             ->add('position')
             ->add('attributeClass')
-            ->add('valueClass')
+            ->add('dataClass')
             ->add('formType')
             ->add('formOptions')
         ;
@@ -115,29 +117,19 @@ class TypeAdmin extends Admin
 
     private function getAvailableFormTypes()
     {
-        $container = $this->getConfigurationPool()->getContainer();
-        $types = array_keys($container->getParameter('dynamic_form_types'));
+        $optionsProviderChain = $this->getConfigurationPool()->getContainer()->get('core_attribute.form_type_options_provider.provider_chain');
+        $types = array_keys($optionsProviderChain->getProviders());
 
         return array_combine($types, $types);
     }
 
-    public function getObject($id){
-        $object = parent::getObject($id);
-
-        if($object && $object->getFormType()){
-            $formType = $this->getFormType($object->getFormType());
-            $object->setFormOptions(array_replace_recursive($formType->getOptions(), $object->buildFormOptions()));
-        }
-
-        return $object;
-    }
-
     public function getNewInstance()
     {
+
         if ($this->hasRequest() && $preset = $this->getRequest()->get('preset')) {
-            $formType = $this->getFormType($preset);
-            $formTypeOptions = $formType->getOptions();
-            $object = Type::create('', isset($formTypeOptions['label'])?$formTypeOptions['label']:'', $formTypeOptions['attribute_class'], $formTypeOptions['value_class'], $formType->getName(), $formTypeOptions);
+            $typeFactory = $this->configurationPool->getContainer()->get('core_attribute.factory.type');
+            $object = $typeFactory->create($preset);
+
             foreach ($this->getExtensions() as $extension) {
                 $extension->alterNewInstance($this, $object);
             }
@@ -156,7 +148,7 @@ class TypeAdmin extends Admin
 
     public function toString($object)
     {
-        if ($object instanceof Type && $object->getId()) {
+        if ($object instanceof Type && $object->getLabel()) {
             return $object->getLabel();
         } else {
             return parent::toString($object);
@@ -316,23 +308,6 @@ class TypeAdmin extends Admin
         $listItem = current($dashboardChildren);
         $listItem->setUri($this->generateUrl('list', array('parent' => null,)));
         return $listItem;
-    }
-
-    /**
-     * @param string $type
-     * @return DynamicFormTypeInterface|mixed
-     */
-    private function getFormType($type)
-    {
-
-        //todo error handling: undefined type
-
-        $container = $this->getConfigurationPool()->getContainer();
-
-        $formType = $container->getParameter('dynamic_form_types');
-        /** @var DynamicFormTypeInterface $formType */
-        $formType = $container->get($formType[$type]);
-        return $formType;
     }
 
     /**

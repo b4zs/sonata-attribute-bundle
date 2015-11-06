@@ -26,11 +26,6 @@ class BooleanAttribute extends Attribute
 		$this->booleanValue = $value;
 	}
 
-	protected function getValueType()
-	{
-		return 'boolean';
-	}
-
 	public function assertValue($value)
 	{
 		if ($value && !is_bool($value)) {

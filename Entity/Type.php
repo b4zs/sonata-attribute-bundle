@@ -19,7 +19,7 @@ class Type
 
 	private $attributeClass = 'Core\\AttributeBundle\\Entity\\StringAttribute';
 
-	private $valueClass = null;
+	private $dataClass = null;
 
 	private $formType;
 
@@ -124,7 +124,7 @@ class Type
 			$this->getFormOptions(),
 			array(
 				'label'         => $this->getLabel(),
-				'data_class'    => $this->getValueClass(),
+				'data_class'    => $this->getDataClass(),
 			)
 		);
 	}
@@ -144,28 +144,28 @@ class Type
 		$this->parent = $parent;
 	}
 
-	public function getValueClass()
+	public function getDataClass()
 	{
-		return $this->valueClass;
+		return $this->dataClass;
 	}
 
-	public function setValueClass($valueClass)
+	public function setDataClass($dataClass)
 	{
-		$this->valueClass = $valueClass;
+		$this->dataClass = $dataClass;
 	}
 
-	public static function create($name, $label = null, $attributeClass = null, $valueClass = null, $formType = null, array $formOptions = array())
-	{
-		$instance = new static();
-		$instance->setName($name);
-		if ($label) $instance->setLabel($label);
-		if ($attributeClass) $instance->setAttributeClass($attributeClass);
-		if ($valueClass) $instance->setValueClass($valueClass);
-		if ($formType) $instance->setFormType($formType);
-		if ($formOptions) $instance->setFormOptions($formOptions);
-
-		return $instance;
-	}
+//	public static function create($name, $label = null, $attributeClass = null, $dataClass = null, $formType = null, array $formOptions = array())
+//	{
+//		$instance = new static();
+//		$instance->setName($name);
+//		if ($label) $instance->setLabel($label);
+//		if ($attributeClass) $instance->setAttributeClass($attributeClass);
+//		if ($dataClass) $instance->setDataClass($dataClass);
+//		if ($formType) $instance->setFormType($formType);
+//		if ($formOptions) $instance->setFormOptions($formOptions);
+//
+//		return $instance;
+//	}
 
 	function __toString()
 	{

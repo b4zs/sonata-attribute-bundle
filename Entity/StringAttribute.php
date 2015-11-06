@@ -26,11 +26,6 @@ class StringAttribute extends Attribute
 		$this->stringValue = $value;
 	}
 
-	protected function getValueType()
-	{
-		return 'string';
-	}
-
 	public function assertValue($value)
 	{
 		if ($value && !is_string($value)) {

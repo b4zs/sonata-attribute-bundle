@@ -38,7 +38,7 @@ class FormOptionFormTypResolver implements FormOptionFormTypResolverInterface{
             case 'rounding_mode':
 
                 $choices = array();
-                if($formType == 'dynamic_integer'){
+                if($formType == 'integer'){
                     $choices = array(
                         IntegerToLocalizedStringTransformer::ROUND_DOWN => 'Round down',
                         IntegerToLocalizedStringTransformer::ROUND_UP => 'Round up',
@@ -48,7 +48,7 @@ class FormOptionFormTypResolver implements FormOptionFormTypResolverInterface{
                         IntegerToLocalizedStringTransformer::ROUND_HALF_EVEN => 'Round half even',
                         IntegerToLocalizedStringTransformer::ROUND_HALF_UP => 'Round half up',
                     );
-                }elseif($formType == 'dynamic_number'){
+                }elseif($formType == 'number'){
                     $choices = array(
                         NumberToLocalizedStringTransformer::ROUND_DOWN => 'Round down',
                         NumberToLocalizedStringTransformer::ROUND_UP => 'Round up',

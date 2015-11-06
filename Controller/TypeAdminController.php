@@ -15,8 +15,9 @@ class TypeAdminController extends CRUDController
 		if (null === $preset && $isGet) {
 			/** @var TypeAdmin $admin */
 			$admin = $this->admin;
-//			$presetNames = array_keys($admin->getPresets());
-			$presetNames = array_keys($this->getParameter('dynamic_form_types'));
+
+			$optionsProviderChain = $this->get('core_attribute.form_type_options_provider.provider_chain');
+			$presetNames = array_keys($optionsProviderChain->getProviders());
 
 			return $this->render('CoreAttributeBundle:TypeAdmin:create_preset_selector.html.twig', array(
 				'presets' => array_combine($presetNames, $presetNames),

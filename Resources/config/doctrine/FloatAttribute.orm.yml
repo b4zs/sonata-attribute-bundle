@@ -1,0 +1,8 @@
+Core\AttributeBundle\Entity\FloatAttribute:
+    type: entity
+    fields:
+        floatValue:
+            column: float_value
+            type: float
+            nullable: true
+        

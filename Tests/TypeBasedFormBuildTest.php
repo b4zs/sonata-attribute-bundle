@@ -35,7 +35,7 @@ class TypeBasedFormBuildTest extends KernelTestCase
 		$rootType->setName('form');
 		$rootType->setFormType('form');
 		$rootType->setAttributeClass($namespace . 'CollectionAttribute');
-		$rootType->setValueClass($namespace.'CollectionAttribute');
+		$rootType->setDataClass($namespace.'CollectionAttribute');
 
 		$usernameType = new Type();
 		$usernameType->setName('username');
@@ -63,7 +63,7 @@ class TypeBasedFormBuildTest extends KernelTestCase
 		$fieldsetType->setLabel('fieldset');
 		$fieldsetType->setAttributeClass($namespace . 'CollectionAttribute');
 		$fieldsetType->setFormType('form');
-		$fieldsetType->setValueClass($namespace.'CollectionAttribute');
+		$fieldsetType->setDataClass($namespace.'CollectionAttribute');
 
 		$phoneType = new Type();
 		$phoneType->setName('phone');
