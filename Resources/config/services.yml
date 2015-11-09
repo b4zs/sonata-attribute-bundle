@@ -28,6 +28,14 @@ services:
         tags:
             - { name: sonata.block }
 
+    ### Event Listener ###
+    core_attribute.event_listener_dynamic_entity_listener:
+        class: Core\AttributeBundle\EventListener\DynamicEntityListener
+        arguments:
+            - %sonata.media.media.class%
+        tags:
+            - { name: doctrine.event_listener, event: preRemove }
+
     ### Form type ###
     core_attribute.form.form_options:
         class: Core\AttributeBundle\Form\FormOptionsType
@@ -135,3 +143,10 @@ services:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Checkbox
         tags:
             - { name: dynamic_form.options_provider, alias: checkbox }
+
+    core_attribute.form_type_options_provider.media:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Media
+        arguments:
+            - %sonata.media.admin.media.entity%
+        tags:
+            - { name: dynamic_form.options_provider, alias: core_media_file_input }

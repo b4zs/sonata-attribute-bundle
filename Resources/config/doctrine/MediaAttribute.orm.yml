@@ -1,0 +1,2 @@
+Core\AttributeBundle\Entity\MediaAttribute:
+    type: entity

@@ -53,6 +53,8 @@ class FormOptionsType extends AbstractType{
                 'attribute_class',
                 'label',
                 'data_class',
+                'provider',
+                'context',
             )
         ));
     }

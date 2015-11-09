@@ -2,6 +2,7 @@
 
 namespace Core\AttributeBundle\DependencyInjection;
 
+use Sonata\EasyExtendsBundle\Mapper\DoctrineCollector;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -24,5 +25,31 @@ class CoreAttributeExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        if ($container->hasParameter('sonata.media.admin.media.entity')) {
+            $mediaClass = $container->getParameter('sonata.media.admin.media.entity');
+
+            $this->registerDoctrineMapping(array(
+                'media_class' => $mediaClass,
+            ));
+
+        }
+    }
+
+    private function registerDoctrineMapping($config)
+    {
+        $collector = DoctrineCollector::getInstance();
+
+        $collector->addAssociation('Core\AttributeBundle\Entity\MediaAttribute', 'mapManyToOne', array(
+            'fieldName'     => 'mediaValue',
+            'targetEntity'  => $config['media_class'],
+            'cascade'       => array('persist', 'refresh', 'merge'),
+            'joinColumns'    => array(
+                array(
+                    'name'     => 'media_value',
+                    'onDelete' => 'SET NULL',
+                ),
+            ),
+        ));
     }
 }

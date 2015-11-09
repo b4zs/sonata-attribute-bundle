@@ -21,6 +21,8 @@ class FormOptionFormTypResolver implements FormOptionFormTypResolverInterface{
             case 'default_protocol':
             case 'placeholder':
             case 'empty_value':
+            case 'context':
+            case 'provider':
                 $builderParameters = array_replace_recursive($builderParameters, array(
                     'type' => 'text',
                 ));

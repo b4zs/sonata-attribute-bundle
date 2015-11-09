@@ -144,6 +144,12 @@ class TypeFactoryTest extends KernelTestCase{
                     'provider' => 'core_attribute.form_type_options_provider.checkbox',
                 ),
             ),
+            array(
+                'data' => array(
+                    'preset' => 'core_media_file_input',
+                    'provider' => 'core_attribute.form_type_options_provider.media',
+                ),
+            ),
         );
     }
 

@@ -96,4 +96,12 @@ class FormSubmissionAdmin extends Admin
         return $rootType;
     }
 
+    public function getTemplate($name)
+    {
+        switch ($name) {
+            case 'edit': return 'CoreAttributeBundle:FormSubmissionAdmin:edit.html.twig';
+            default:     return parent::getTemplate($name);
+        }
+    }
+
 }
