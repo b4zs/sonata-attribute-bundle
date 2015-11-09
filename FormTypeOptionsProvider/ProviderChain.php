@@ -3,12 +3,12 @@
 namespace Core\AttributeBundle\FormTypeOptionsProvider;
 
 
-use Core\AttributeBundle\Utils\FormOptionFormTypResolverInterface;
+use Core\AttributeBundle\Utils\FormOptionFormTypeResolverInterface;
 
 class ProviderChain
 {
     /**
-     * @var array|FormOptionFormTypResolverInterface[]
+     * @var array|FormOptionFormTypeResolverInterface[]
      */
     private $providers;
 
@@ -26,7 +26,7 @@ class ProviderChain
     }
 
     /**
-     * @return array|\Core\AttributeBundle\Utils\FormOptionFormTypResolverInterface[]
+     * @return array|\Core\AttributeBundle\Utils\FormOptionFormTypeResolverInterface[]
      */
     public function getProviders(){
         return $this->providers;

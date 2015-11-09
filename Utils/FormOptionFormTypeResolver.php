@@ -6,7 +6,7 @@ use Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStri
 use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
 use Symfony\Component\Intl\DateFormatter\IntlDateFormatter;
 
-class FormOptionFormTypResolver implements FormOptionFormTypResolverInterface{
+class FormOptionFormTypeResolver implements FormOptionFormTypeResolverInterface{
 
     public function resolve($option, $formType){
 

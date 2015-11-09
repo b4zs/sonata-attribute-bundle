@@ -2,7 +2,7 @@
 
 namespace Core\AttributeBundle\Utils;
 
-interface FormOptionFormTypResolverInterface{
+interface FormOptionFormTypeResolverInterface{
 
     /**
      * @param string $option

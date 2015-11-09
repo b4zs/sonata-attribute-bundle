@@ -3,7 +3,7 @@
 namespace Core\AttributeBundle\Form;
 
 use Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain;
-use Core\AttributeBundle\Utils\FormOptionFormTypResolver;
+use Core\AttributeBundle\Utils\FormOptionFormTypeResolver;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -23,7 +23,7 @@ class FormOptionsType extends AbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $formOptionResolver = new FormOptionFormTypResolver();
+        $formOptionResolver = new FormOptionFormTypeResolver();
 
         $formType = $options['form_type'];
         $hiddenFields = $options['hidden_option_fields'];
