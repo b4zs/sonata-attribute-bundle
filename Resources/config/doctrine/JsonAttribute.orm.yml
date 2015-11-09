@@ -1,0 +1,8 @@
+Core\AttributeBundle\Entity\JsonAttribute:
+    type: entity
+    fields:
+        jsonValue:
+            column: json_value
+            type: json
+            nullable: true
+        

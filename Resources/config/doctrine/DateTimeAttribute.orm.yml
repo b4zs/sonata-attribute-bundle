@@ -1,0 +1,8 @@
+Core\AttributeBundle\Entity\DateTimeAttribute:
+    type: entity
+    fields:
+        dateTimeValue:
+            column: date_time_value
+            type: datetime
+            nullable: true
+        

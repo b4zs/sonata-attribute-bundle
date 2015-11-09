@@ -4,6 +4,7 @@ namespace Core\AttributeBundle\Utils;
 
 use Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStringTransformer;
 use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
+use Symfony\Component\Intl\DateFormatter\IntlDateFormatter;
 
 class FormOptionFormTypResolver implements FormOptionFormTypResolverInterface{
 
@@ -18,6 +19,8 @@ class FormOptionFormTypResolver implements FormOptionFormTypResolverInterface{
             case 'label':
             case 'empty_data':
             case 'default_protocol':
+            case 'placeholder':
+            case 'empty_value':
                 $builderParameters = array_replace_recursive($builderParameters, array(
                     'type' => 'text',
                 ));
@@ -25,6 +28,10 @@ class FormOptionFormTypResolver implements FormOptionFormTypResolverInterface{
             case 'required':
             case 'disabled':
             case 'trim':
+            case 'expanded':
+            case 'multiple':
+            case 'with_minutes':
+            case 'with_seconds':
                 $builderParameters = array_replace_recursive($builderParameters, array(
                     'type' => 'checkbox',
                 ));
@@ -67,6 +74,37 @@ class FormOptionFormTypResolver implements FormOptionFormTypResolverInterface{
                     )
                 ));
                 break;
+            case 'widget':
+            case 'date_widget':
+            case 'time_widget':
+                $builderParameters = array_replace_recursive($builderParameters, array(
+                    'type' => 'choice',
+                    'options' => array(
+                        'choices' => array(
+                            'choice' => 'Choice',
+                            'text' => 'Text',
+                            'single_text' => 'Single text'
+                        ),
+                    ),
+                ));
+                break;
+            case 'format':
+            case 'date_format':
+                $builderParameters = array_replace_recursive($builderParameters, array(
+                    'type' => 'choice',
+                    'options' => array(
+                        'choices' => array(
+                            IntlDateFormatter::NONE => 'None',
+                            IntlDateFormatter::SHORT => 'Short',
+                            IntlDateFormatter::MEDIUM => 'Medium',
+                            IntlDateFormatter::LONG => 'Long',
+                            IntlDateFormatter::FULL => 'Full',
+                            IntlDateFormatter::GREGORIAN => 'Georgian',
+                            IntlDateFormatter::TRADITIONAL => 'Traditional',
+                        ),
+                    ),
+                ));
+                break;
             case 'currency':
                 $builderParameters = array_replace_recursive($builderParameters, array(
                     'type' => 'currency',
@@ -75,6 +113,12 @@ class FormOptionFormTypResolver implements FormOptionFormTypResolverInterface{
             case 'attr':
                 $builderParameters = array_replace_recursive($builderParameters, array(
                     'type' => 'form',
+                ));
+                break;
+            case 'choices':
+            case 'preferred_choices':
+                $builderParameters = array_replace_recursive($builderParameters, array(
+                    'type' => 'yaml_array',
                 ));
                 break;
             default:

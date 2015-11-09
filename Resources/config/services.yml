@@ -85,3 +85,53 @@ services:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Url
         tags:
             - { name: dynamic_form.options_provider, alias: url }
+
+    core_attribute.form_type_options_provider.choice:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Choice
+        tags:
+            - { name: dynamic_form.options_provider, alias: choice }
+
+    core_attribute.form_type_options_provider.country:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Country
+        tags:
+            - { name: dynamic_form.options_provider, alias: country }
+
+    core_attribute.form_type_options_provider.language:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Language
+        tags:
+            - { name: dynamic_form.options_provider, alias: language }
+
+    core_attribute.form_type_options_provider.locale:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Locale
+        tags:
+            - { name: dynamic_form.options_provider, alias: locale }
+
+    core_attribute.form_type_options_provider.timezone:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Timezone
+        tags:
+            - { name: dynamic_form.options_provider, alias: timezone }
+
+    core_attribute.form_type_options_provider.currency:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Currency
+        tags:
+            - { name: dynamic_form.options_provider, alias: currency }
+
+    core_attribute.form_type_options_provider.date:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Date
+        tags:
+            - { name: dynamic_form.options_provider, alias: date }
+
+    core_attribute.form_type_options_provider.time:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Time
+        tags:
+            - { name: dynamic_form.options_provider, alias: time }
+
+    core_attribute.form_type_options_provider.datetime:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\DateTime
+        tags:
+            - { name: dynamic_form.options_provider, alias: datetime }
+
+    core_attribute.form_type_options_provider.checkbox:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Checkbox
+        tags:
+            - { name: dynamic_form.options_provider, alias: checkbox }

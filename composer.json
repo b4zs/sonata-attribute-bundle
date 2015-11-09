@@ -7,5 +7,6 @@
     "psr-4": { "Core\\AttributeBundle\\": "" }
   },
   "require": {
+    "sonata/tools-bundle": "dev-master"
   }
 }

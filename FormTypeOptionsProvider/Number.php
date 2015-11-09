@@ -10,7 +10,7 @@ class Number extends Integer{
         $defaultOptions = parent::getOptions();
 
         return array_merge($defaultOptions, array(
-            'attribute_class' => 'Core\AttributeBundle\Entity\IntegerAttribute', //@todo implement FloatAttribute and change this to that
+            'attribute_class' => 'Core\AttributeBundle\Entity\FloatAttribute',
             'rounding_mode' => NumberToLocalizedStringTransformer::ROUND_DOWN,
         ));
     }

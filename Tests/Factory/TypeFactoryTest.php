@@ -84,6 +84,66 @@ class TypeFactoryTest extends KernelTestCase{
                     'provider' => 'core_attribute.form_type_options_provider.url',
                 ),
             ),
+            array(
+                'data' => array(
+                    'preset' => 'choice',
+                    'provider' => 'core_attribute.form_type_options_provider.choice',
+                ),
+            ),
+            array(
+                'data' => array(
+                    'preset' => 'country',
+                    'provider' => 'core_attribute.form_type_options_provider.country',
+                ),
+            ),
+            array(
+                'data' => array(
+                    'preset' => 'language',
+                    'provider' => 'core_attribute.form_type_options_provider.language',
+                ),
+            ),
+            array(
+                'data' => array(
+                    'preset' => 'locale',
+                    'provider' => 'core_attribute.form_type_options_provider.locale',
+                ),
+            ),
+            array(
+                'data' => array(
+                    'preset' => 'timezone',
+                    'provider' => 'core_attribute.form_type_options_provider.timezone',
+                ),
+            ),
+            array(
+                'data' => array(
+                    'preset' => 'currency',
+                    'provider' => 'core_attribute.form_type_options_provider.currency',
+                ),
+            ),
+            array(
+                'data' => array(
+                    'preset' => 'date',
+                    'provider' => 'core_attribute.form_type_options_provider.date',
+                ),
+            ),
+            array(
+                'data' => array(
+                    'preset' => 'time',
+                    'provider' => 'core_attribute.form_type_options_provider.time',
+                ),
+            ),
+            array(
+                'data' => array(
+                    'preset' => 'datetime',
+                    'provider' => 'core_attribute.form_type_options_provider.datetime',
+                ),
+            ),
+            array(
+                'data' => array(
+                    'preset' => 'checkbox',
+                    'provider' => 'core_attribute.form_type_options_provider.checkbox',
+                ),
+            ),
         );
     }
 
