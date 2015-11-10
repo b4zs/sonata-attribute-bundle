@@ -21,7 +21,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 	const SERVICE_ID = 'core_attribute.block.service.form';
 
 	/** @var  ContainerInterface */
-	private $container;
+	protected $container;
 
 	public function buildEditForm(FormMapper $form, BlockInterface $block)
 	{
@@ -70,9 +70,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 				$entityManager = $this->getEntityManager();
 
 				$formData = $form->getData();
-				$submission = new FormSubmission();
-				$submission->setType($blockContext->getBlock()->getSetting('user_form'));
-				$submission->setCollection($formData);
+				$submission = $this->createSubmission($blockContext->getBlock()->getSetting('user_form'), $formData);
 
 				$entityManager->persist($submission);
 				$entityManager->flush();
@@ -86,16 +84,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 			}
 		}
 
-		return $this->renderResponse(
-			$blockContext->getBlock()->getSetting('template'),
-			array(
-				'block_context'  => $blockContext,
-				'block'          => $blockContext->getBlock(),
-				'form'		 	 => $form->createView(),
-				'messages'		 => $messages,
-			),
-			$response
-		);
+		return $this->createResponse($blockContext, $response, $form, $messages);
 	}
 
 	private function getTemplateChoices()
@@ -140,27 +129,27 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 		return $settings;
 	}
 
-	private function getRequest()
+	protected function getRequest()
 	{
 		return $this->container->get('request_stack')->getCurrentRequest();
 	}
 
-	private function getEntityManager()
+	protected function getEntityManager()
 	{
 		return $this->container->get('doctrine.orm.default_entity_manager');
 	}
 
-	private function getTranslator()
+	protected function getTranslator()
 	{
 		return $this->container->get('translator');
 	}
 
-	private function getRouter()
+	protected function getRouter()
 	{
 		return $this->container->get('router');
 	}
 
-	private function getProviderChain(){
+	protected function getProviderChain(){
 		return $this->container->get('core_attribute.form_type_options_provider.provider_chain');
 	}
 
@@ -168,7 +157,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 	 * @param BlockInterface $block
 	 * @return \Symfony\Component\Form\Form
 	 */
-	private function createForm(BlockInterface $block)
+	protected function createForm(BlockInterface $block)
 	{
 		$formFactory = $this->container->get('form.factory');
 		/** @var Type $rootType */
@@ -192,5 +181,39 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 
 		$rootForm = $formFactory->createBuilder(new DynamicFormType($this->getProviderChain(), $rootType), null, $rootFormOptions)->getForm();
 		return $rootForm;
+	}
+
+	/**
+	 * @param $type
+	 * @param $formData
+	 * @return FormSubmission
+	 */
+	protected function createSubmission($type, $formData)
+	{
+		$submission = new FormSubmission();
+		$submission->setType($type);
+		$submission->setCollection($formData);
+		return $submission;
+	}
+
+	/**
+	 * @param BlockContextInterface $blockContext
+	 * @param Response $response
+	 * @param $form
+	 * @param $messages
+	 * @return Response
+	 */
+	protected function createResponse(BlockContextInterface $blockContext, Response $response, $form, $messages)
+	{
+		return $this->renderResponse(
+			$blockContext->getBlock()->getSetting('template'),
+			array(
+				'block_context' => $blockContext,
+				'block' => $blockContext->getBlock(),
+				'form' => $form->createView(),
+				'messages' => $messages,
+			),
+			$response
+		);
 	}
 } 
