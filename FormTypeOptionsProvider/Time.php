@@ -2,6 +2,8 @@
 
 namespace Core\AttributeBundle\FormTypeOptionsProvider;
 
+use Core\AttributeBundle\Validator\Constraints\ConstraintWrapper;
+
 class Time extends AbstractProvider{
 
     public function getOptions(){
@@ -13,6 +15,12 @@ class Time extends AbstractProvider{
             'with_minutes' => true,
             'with_seconds' => false,
         ));
+    }
+
+    protected function buildConstraintsArray($options)
+    {
+        $constraints = parent::buildConstraintsArray($options);
+        $constraints[] = new ConstraintWrapper(new \Symfony\Component\Validator\Constraints\Time());
     }
 
 }

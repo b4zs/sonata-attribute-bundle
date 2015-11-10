@@ -2,6 +2,8 @@
 
 namespace Core\AttributeBundle\FormTypeOptionsProvider;
 
+use Core\AttributeBundle\Validator\Constraints\ConstraintWrapper;
+
 class Url extends AbstractProvider{
 
     public function getOptions(){
@@ -12,5 +14,12 @@ class Url extends AbstractProvider{
             'default_protocol' => 'http',
         ));
     }
+
+    protected function buildConstraintsArray($options)
+    {
+        $constraints = parent::buildConstraintsArray($options);
+        $constraints[] = new ConstraintWrapper(new \Symfony\Component\Validator\Constraints\Url());
+    }
+
 
 }

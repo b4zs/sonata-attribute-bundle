@@ -2,6 +2,7 @@
 
 namespace Core\AttributeBundle\FormTypeOptionsProvider;
 
+use Core\AttributeBundle\Validator\Constraints\ConstraintWrapper;
 use Symfony\Component\Intl\DateFormatter\IntlDateFormatter;
 
 class Date extends AbstractProvider{
@@ -14,6 +15,12 @@ class Date extends AbstractProvider{
             'widget' => 'choice',
             'format' => IntlDateFormatter::MEDIUM,
         ));
+    }
+
+    protected function buildConstraintsArray($options)
+    {
+        $constraints = parent::buildConstraintsArray($options);
+        $constraints[] = new ConstraintWrapper(new \Symfony\Component\Validator\Constraints\Date());
     }
 
 }
