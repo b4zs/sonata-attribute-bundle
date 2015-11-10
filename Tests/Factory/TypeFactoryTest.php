@@ -31,7 +31,7 @@ class TypeFactoryTest extends KernelTestCase{
 
         $this->assertInstanceOf('\Core\AttributeBundle\Entity\Type', $type);
         $this->assertEquals($data['preset'], $type->getFormType());
-        $this->assertEquals($formOptions, $type->buildFormOptions());
+        $this->assertEquals($formOptions, $type->getFormOptions());
     }
 
     public function getPresetsData(){

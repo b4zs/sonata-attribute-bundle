@@ -2,6 +2,9 @@
 
 namespace Core\AttributeBundle\FormTypeOptionsProvider;
 
+use Core\AttributeBundle\Validator\Constraints\ConstraintWrapper;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 abstract class AbstractProvider implements ProviderInterface{
 
     public function getOptions(){
@@ -31,5 +34,26 @@ abstract class AbstractProvider implements ProviderInterface{
         $options = $this->getOptions();
         return array_key_exists($option, $options);
     }
+
+    protected function buildConstraintsArray($options){
+
+        $constraints = array();
+
+        if(array_key_exists('required', $options) && $options['required'] === true){
+            $constraints[] = new ConstraintWrapper(new NotBlank());
+        }
+
+        return $constraints;
+    }
+
+    /**
+     * @param array
+     * @return array
+     */
+    public function appendConstraints($options)
+    {
+        return array_merge($options, array('constraints' => $this->buildConstraintsArray($options)));
+    }
+
 
 }

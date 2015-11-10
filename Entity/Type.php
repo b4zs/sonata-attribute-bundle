@@ -118,17 +118,6 @@ class Type
 		$this->getChildren()->add($type);
 	}
 
-	public function buildFormOptions()
-	{
-		return array_merge(
-			$this->getFormOptions(),
-			array(
-				'label'         => $this->getLabel(),
-				'data_class'    => $this->getDataClass(),
-			)
-		);
-	}
-
 	public function getId()
 	{
 		return $this->id;
@@ -153,19 +142,6 @@ class Type
 	{
 		$this->dataClass = $dataClass;
 	}
-
-//	public static function create($name, $label = null, $attributeClass = null, $dataClass = null, $formType = null, array $formOptions = array())
-//	{
-//		$instance = new static();
-//		$instance->setName($name);
-//		if ($label) $instance->setLabel($label);
-//		if ($attributeClass) $instance->setAttributeClass($attributeClass);
-//		if ($dataClass) $instance->setDataClass($dataClass);
-//		if ($formType) $instance->setFormType($formType);
-//		if ($formOptions) $instance->setFormOptions($formOptions);
-//
-//		return $instance;
-//	}
 
 	function __toString()
 	{

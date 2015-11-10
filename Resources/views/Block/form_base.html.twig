@@ -4,7 +4,7 @@
     {% set container_id = 'block_container_'~block.id %}
     {% set form_id = 'block_form_'~block.id %}
 
-    {{ form_start(form, {attr:{id: form_id}}) }}
+    {{ form_start(form, {attr:{id: form_id, novalidate:true}}) }}
         {{ form_errors(form) }}
 
         <h3>{{ block.settings.title }}</h3>

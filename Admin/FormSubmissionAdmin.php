@@ -92,7 +92,7 @@ class FormSubmissionAdmin extends Admin
     private function createFormType()
     {
         $rootType = $this->getSubject()->getType();
-        $rootType = new DynamicFormType($rootType);
+        $rootType = new DynamicFormType($this->container->get('core_attribute.form_type_options_provider.provider_chain'),$rootType);
         return $rootType;
     }
 

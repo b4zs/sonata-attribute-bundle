@@ -4,21 +4,33 @@ namespace Core\AttributeBundle\Form;
 
 use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Form\DataTransformer\AttributeToValueTransformer;
+use Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class DynamicFormType extends AbstractType
 {
 	/** @var Type */
 	private $type;
 
-	function __construct(Type $type)
-	{
+	private $providerChain;
+
+	function __construct(ProviderChain $providerChain, Type $type){
+		$this->providerChain = $providerChain;
 		$this->type = $type;
 	}
 
+	/**
+	 * @param Type $type
+	 */
+	public function setType($type)
+	{
+		$this->type = $type;
+	}
 
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
@@ -29,7 +41,7 @@ class DynamicFormType extends AbstractType
 			$name = $child->getName();
 			$childData = $pa === null ? null : $pa->getValue($data, $name);
 
-			$builder->add($name, new DynamicFormType($child), array(
+			$builder->add($name, new DynamicFormType($this->providerChain, $child), array(
 				'data'  => $childData,
 			));
 		}
@@ -46,7 +58,9 @@ class DynamicFormType extends AbstractType
 	 */
 	public function configureOptions(OptionsResolver $resolver)
 	{
-		$resolver->setDefaults($this->type->buildFormOptions());
+		$provider = $this->providerChain->getProvider($this->type->getFormType());
+		$options = $provider->appendConstraints($this->type->getFormOptions());
+		$resolver->setDefaults($options);
 	}
 
 	/**

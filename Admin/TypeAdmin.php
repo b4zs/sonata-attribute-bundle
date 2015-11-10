@@ -4,7 +4,6 @@ namespace Core\AttributeBundle\Admin;
 
 
 use Core\AttributeBundle\Entity\Type;
-use Core\AttributeBundle\Form\DynamicFormType;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -160,18 +159,6 @@ class TypeAdmin extends Admin
             case 'list': return 'CoreAttributeBundle:TypeAdmin:list.html.twig';
             default:     return parent::getTemplate($name);
         }
-    }
-
-    public function buildFormByType($type, $data = null, array $options = array())
-    {
-        $containerInterface = $this->getConfigurationPool()->getContainer();
-        $formFactory = $containerInterface->get('form.factory');
-        $form = $formFactory->create(new DynamicFormType($type), $data, $options);
-
-        if ($this->hasRequest()) {
-            $form->handleRequest($this->getRequest());
-        }
-        return $form;
     }
 
     public function prePersist($object)

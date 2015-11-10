@@ -160,6 +160,10 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 		return $this->container->get('router');
 	}
 
+	private function getProviderChain(){
+		return $this->container->get('core_attribute.form_type_options_provider.provider_chain');
+	}
+
 	/**
 	 * @param BlockInterface $block
 	 * @return \Symfony\Component\Form\Form
@@ -167,6 +171,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 	private function createForm(BlockInterface $block)
 	{
 		$formFactory = $this->container->get('form.factory');
+		/** @var Type $rootType */
 		$rootType = $block->getSetting('user_form');
 
 		$page = $this->container->get('sonata.page.cms_manager_selector')->retrieve()->getCurrentPage();
@@ -177,7 +182,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 			))
 			: '#';
 
-		$rootFormOptions = $rootType->buildFormOptions();
+		$rootFormOptions = $rootType->getFormOptions();
 		$rootFormOptions = array_merge(
 			array(
 				'action'            => $url,
@@ -185,7 +190,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 			),
 			$rootFormOptions);
 
-		$rootForm = $formFactory->createBuilder(new DynamicFormType($rootType), null, $rootFormOptions)->getForm();
+		$rootForm = $formFactory->createBuilder(new DynamicFormType($this->getProviderChain(), $rootType), null, $rootFormOptions)->getForm();
 		return $rootForm;
 	}
 } 

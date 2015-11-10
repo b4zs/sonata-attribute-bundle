@@ -21,4 +21,10 @@ interface ProviderInterface{
      */
     public function hasOption($option);
 
+    /**
+     * @param array
+     * @return array
+     */
+    public function appendConstraints($options);
+
 }
