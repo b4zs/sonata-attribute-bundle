@@ -16,9 +16,7 @@ abstract class AbstractProvider implements ProviderInterface{
             'label' => null,
             'required' => true,
             'attr'  => array(
-                'maxlength' => null,
                 'readonly' => false,
-                'placeholder' => null,
                 'class' => null,
                 'style' => null,
             ),
