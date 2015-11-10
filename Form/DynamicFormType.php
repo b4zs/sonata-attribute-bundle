@@ -2,7 +2,6 @@
 
 namespace Core\AttributeBundle\Form;
 
-use Core\AttributeBundle\Entity\CollectionAttribute;
 use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Form\DataTransformer\AttributeToValueTransformer;
 use Symfony\Component\Form\AbstractType;
@@ -35,14 +34,6 @@ class DynamicFormType extends AbstractType
 			));
 		}
 
-
-		//TODO: ?!?! do we need it? shouldn't each attributeValue has own name field?
-		if ($data instanceof CollectionAttribute) {
-			foreach ($data->getValue() as $childAttribute) {
-				//TODO:
-			}
-		}
-
 		$attributeToValueTransformer = new AttributeToValueTransformer();
 		$attributeToValueTransformer->setType($this->type);
 		$builder->addModelTransformer($attributeToValueTransformer);
@@ -70,7 +61,5 @@ class DynamicFormType extends AbstractType
 	{
 		return 'attr_'.$this->type->getName();
 	}
-
-
 
 }
