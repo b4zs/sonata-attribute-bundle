@@ -47,7 +47,7 @@ class TypeFactory
         }
 
         if (!is_subclass_of($optionProvider->getOption('attribute_class'), 'Core\AttributeBundle\Entity\Attribute')) {
-            throw new \RuntimeException(sprintf('"%s" must be a subclass of "Core\AttributeBundle\Entity\Attribute", instance of "%s" given', 'attribute_class', $optionProvider->getOption('attribute_class')));
+            throw new \RuntimeException(sprintf('"%s" must be a subclass of "Core\AttributeBundle\Entity\Attribute", value of "%s" given', 'attribute_class', json_encode($optionProvider->getOption('attribute_class'))));
         }
 
         if ($optionProvider->getOption('data_class') && !class_exists($optionProvider->getOption('data_class'))) {
