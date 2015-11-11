@@ -41,7 +41,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 				)),
 				array('template', 'choice', array(
 					'required'  => true,
-					'choices'   => array('CoreAttributeBundle:Block:form_base.html.twig' => 'defult') + $this->getTemplateChoices(),
+					'choices'   => array('CoreAttributeBundle:Block:form_base.html.twig' => 'default') + $this->getTemplateChoices(),
 				)),
 			),
 		));
