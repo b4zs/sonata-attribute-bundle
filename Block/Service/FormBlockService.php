@@ -122,10 +122,6 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 		$settings['user_form'] = $this->container->get('doctrine.orm.entity_manager')
 			->getRepository('CoreAttributeBundle:Type')->find($settings['user_form']);
 
-		if(!$settings['user_form'] instanceof Type /*|| $settings['user_form']->getFormType() !== 'form'*/){
-			throw new \RuntimeException('Form can not be found');
-		}
-
 		return $settings;
 	}
 
@@ -162,6 +158,10 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 		$formFactory = $this->container->get('form.factory');
 		/** @var Type $rootType */
 		$rootType = $block->getSetting('user_form');
+
+		if(!$rootType instanceof Type /*|| $settings['user_form']->getFormType() !== 'form'*/){
+			throw new \RuntimeException('Form can not be found');
+		}
 
 		$page = $this->container->get('sonata.page.cms_manager_selector')->retrieve()->getCurrentPage();
 		$url = $page && $block
