@@ -162,9 +162,22 @@ class TypeAdmin extends Admin
         }
     }
 
+    /**
+     * @param Type $object
+     */
+    private function addLabelToOptions($object)
+    {
+        $options = $object->getFormOptions();
+        if (array_key_exists('label', $options) && $options['label'] === null && $object->getLabel()) {
+            $options['label'] = $object->getLabel();
+            $object->setFormOptions($options);
+        }
+    }
+
     public function prePersist($object)
     {
         if ($object instanceof Type) {
+            $this->addLabelToOptions($object);
             $object->setChildren($object->getChildren());
         }
     }
@@ -172,6 +185,7 @@ class TypeAdmin extends Admin
     public function preUpdate($object)
     {
         if ($object instanceof Type) {
+            $this->addLabelToOptions($object);
             $object->setChildren($object->getChildren());
         }
     }
