@@ -36,11 +36,18 @@ services:
         tags:
             - { name: doctrine.event_listener, event: preRemove }
 
+    core_attribute.event_listener.form_option_resolve_listener:
+        class: Core\AttributeBundle\EventListener\FormOptionResolveListener
+        tags:
+            - { name: kernel.event_listener, event: core_attribute.option_resolve, method: resolve  }
+            - { name: kernel.event_listener, event: core_attribute.option_resolve_attr, method: resolveAttr  }
+
     ### Form type ###
     core_attribute.form.form_options:
         class: Core\AttributeBundle\Form\FormOptionsType
         arguments:
             - @core_attribute.form_type_options_provider.provider_chain
+            - @event_dispatcher
         tags:
             - { name: form.type, alias: form_options }
 
