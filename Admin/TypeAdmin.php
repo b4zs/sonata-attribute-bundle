@@ -73,8 +73,9 @@ class TypeAdmin extends Admin
                 'required' => false,
             ));
 
-        if($object && $object->getFormType() != 'dynamic_form'){
-            $formMapper->add('parent', 'sonata_type_model_list');
+        if($object){
+            $options = $object->getFormType() == 'form'?array('required' => false):array();
+            $formMapper->add('parent', 'sonata_type_model_list', $options);
         }
 
         $formMapper->add('attributeClass', 'text', array())
