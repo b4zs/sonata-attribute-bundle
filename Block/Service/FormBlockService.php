@@ -164,12 +164,12 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 		}
 
 		$page = $this->container->get('sonata.page.cms_manager_selector')->retrieve()->getCurrentPage();
-		$url = $page && $block
+		$url = /*$page && $block
 			? $this->getRouter()->generate('sonata_page_ajax_block', array(
 				'pageId' => $page->getId(),
 				'blockId' => $block->getId(),
 			))
-			: '#';
+			:*/ '#';
 
 		$rootFormOptions = $rootType->getFormOptions();
 		$rootFormOptions = array_merge(

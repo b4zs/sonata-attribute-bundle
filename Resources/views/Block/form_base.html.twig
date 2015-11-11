@@ -17,27 +17,4 @@
         {{ form_widget(form) }}
         <input type="submit" value="{{ 'link.submit'|trans }}">
     {{ form_end(form) }}
-
-
-    <script>
-        $(function(){
-            var formId = '{{ 'block_form_'~block.id }}';
-            var $form = $('#'+formId);
-            var $container = $('#{{ form_id }}');
-            $form.on('submit', function(e){
-                e.preventDefault();
-
-
-                $.post($form.attr('action'), $form.serializeArray(), function(result){
-                    $container.replaceWith(result);
-                });
-
-                $form.find(':input').attr('disabled', 'disabled');
-                $form.css('opacity', '0.5');
-
-                return false;
-            })
-        })
-    </script>
-
 {% endblock %}
