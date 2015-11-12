@@ -2,7 +2,9 @@
 
 namespace Core\AttributeBundle\Admin;
 
+use Core\AttributeBundle\Entity\CollectionAttribute;
 use Core\AttributeBundle\Entity\FormSubmission;
+use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Form\DynamicFormType;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -103,5 +105,44 @@ class FormSubmissionAdmin extends Admin
             default:     return parent::getTemplate($name);
         }
     }
+
+    public function getExportFields() {
+
+        $type = $this->getParent()->getSubject();
+
+        $paths = $this->buildExportFields($type);
+
+        $paths = array_map(function($n){
+            return str_replace(current(explode('.', $n)), 'collection', $n).'.value';
+        },$paths);
+
+        return array_merge(array('id', 'createdAt'),$paths);
+    }
+
+    /**
+     * @param $type Type
+     * @param $out array
+     * @return array
+     */
+    private function buildExportFields($type, $out = array()){
+
+        foreach($type->getChildren() as $child){
+            if($type->getChildren()->count()){
+                $out = $this->buildExportFields($child, $out);
+            }
+        }
+
+        if($type->getChildren()->count() == 0){
+            $current = $type;
+            $a = array($current->getName());
+            while ($current = $current->getParent()) {
+                $a[] = $current->getName();
+            }
+            $out[] = implode('.',array_reverse($a));
+        }
+
+        return $out;
+    }
+
 
 }
