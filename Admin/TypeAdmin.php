@@ -175,7 +175,7 @@ class TypeAdmin extends Admin
     private function addLabelToOptions($object)
     {
         $options = $object->getFormOptions();
-        if (array_key_exists('label', $options) && $options['label'] === null && $object->getLabel()) {
+        if (array_key_exists('label', $options)) {
             $options['label'] = $object->getLabel();
             $object->setFormOptions($options);
         }
