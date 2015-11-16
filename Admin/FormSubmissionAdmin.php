@@ -138,7 +138,7 @@ class FormSubmissionAdmin extends Admin
             while ($current = $current->getParent()) {
                 $a[] = $current->getName();
             }
-            $out[] = implode('.',array_reverse($a));
+            $out[$type->getLabel().'_'.$type->getId()] = implode('.',array_reverse($a));
         }
 
         return $out;
