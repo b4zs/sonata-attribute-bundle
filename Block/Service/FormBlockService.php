@@ -36,6 +36,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 					'query_builder' => function($repository){
 						return $repository->createQueryBuilder('type')
 							->where('type.formType = :formType')
+							->andWhere('type.parent is null')
 							->setParameter('formType', 'form');
 					},
 				)),
