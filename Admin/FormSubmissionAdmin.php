@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\DependencyInjection\Container;
 
 class FormSubmissionAdmin extends Admin
@@ -31,7 +32,6 @@ class FormSubmissionAdmin extends Admin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->remove('show');
         $collection->remove('create');
     }
 
@@ -49,9 +49,14 @@ class FormSubmissionAdmin extends Admin
     {
         $listMapper
             ->add('collection.type.label')
+            ->add('collection', null, array(
+                'template' => 'CoreAttributeBundle:FormSubmissionAdmin:list_collection_value_field.html.twig',
+                'label' => 'label.form_data',
+            ))
             ->add('createdAt')
             ->add('_action', 'actions', array(
                 'actions' => array(
+                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )
@@ -72,6 +77,20 @@ class FormSubmissionAdmin extends Admin
         ));
 
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureShowFields(ShowMapper $filter)
+    {
+        $filter
+            ->add('collection.type.label')
+            ->add('createdAt')
+            ->add('collection', null, array(
+                'label' => 'label.form_data',
+            ));
+    }
+
 
     /**
      * {@inheritdoc}
@@ -102,6 +121,7 @@ class FormSubmissionAdmin extends Admin
     {
         switch ($name) {
             case 'edit': return 'CoreAttributeBundle:FormSubmissionAdmin:edit.html.twig';
+            case 'show': return 'CoreAttributeBundle:FormSubmissionAdmin:show.html.twig';
             default:     return parent::getTemplate($name);
         }
     }

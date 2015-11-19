@@ -57,6 +57,12 @@ services:
         arguments:
             - @core_attribute.form_type_options_provider.provider_chain
 
+    ### Twig Extensions ###
+    core_attribute.twig.extension.attribute:
+        class: Core\AttributeBundle\Twig\Extension\AttributeExtension
+        tags:
+            - { name: twig.extension }
+
     ### Form type options provider ###
     core_attribute.form_type_options_provider.provider_chain:
         class: Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain

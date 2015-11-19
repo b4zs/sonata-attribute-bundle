@@ -1,0 +1,25 @@
+{% extends admin.getTemplate('base_list_field') %}
+{% import _self as collection_value_helper %}
+
+
+{% macro render(array_value) %}
+	<small style="display: block;">
+		<dl class="dl-vertical">
+			{% for attribute in array_value %}
+				<dt>{{ attribute.label }}</dt>
+				<dd>{{ attribute.value }}</dd>
+			{% endfor %}
+		</dl>
+	</small>
+{% endmacro %}
+
+{% block field %}
+	<div style="width:400px">
+		<button class="btn btn-sm btn-default" type="button" data-toggle="collapse" data-target="#collectionValue_{{ object.id }}">
+			{{ 'link_show'|trans }}
+		</button>
+		<div class="collapse" id="collectionValue_{{ object.id }}">
+			{{ collection_value_helper.render(value|flatten_collection_attribute) }}
+		</div>
+	</div>
+{% endblock %}

@@ -4,3 +4,5 @@ link_submissions: Submissions
 link_edit: Edit
 link_add_child: Create new child
 link_delete: Delete
+link_show: Show
+label.form_data: Formdata
