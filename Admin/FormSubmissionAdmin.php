@@ -2,7 +2,6 @@
 
 namespace Core\AttributeBundle\Admin;
 
-use Core\AttributeBundle\Entity\CollectionAttribute;
 use Core\AttributeBundle\Entity\FormSubmission;
 use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Form\DynamicFormType;

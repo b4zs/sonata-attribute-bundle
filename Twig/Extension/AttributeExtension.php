@@ -4,13 +4,10 @@ namespace Core\AttributeBundle\Twig\Extension;
 
 use Core\AttributeBundle\Entity\Attribute;
 use Core\AttributeBundle\Entity\CollectionAttribute;
-use Symfony\Component\Yaml\Dumper as YamlDumper;
 
 class AttributeExtension extends \Twig_Extension
 {
-    /**
-     * {@inheritdoc}
-     */
+
     public function getFilters()
     {
         return array(
@@ -47,9 +44,6 @@ class AttributeExtension extends \Twig_Extension
         return $out;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'attribute';
