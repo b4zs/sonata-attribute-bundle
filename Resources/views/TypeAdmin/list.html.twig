@@ -1,10 +1,121 @@
-{% extends '@SonataAdmin/CRUD/base_list.html.twig' %}
+{% extends 'SonataAdminBundle:CRUD:list.html.twig' %}
 
-{#{% block navbar_title %}#}
-{#{% spaceless %}#}
-	{#{% set parentType = admin.getParentType() %}#}
-	{#{% if parentType %}#}
-	{#Fields of {{ parentType.name|json_encode }}#}
-	{#{% endif %}#}
-{#{% endspaceless %}#}
-{#{% endblock %}#}
+{% block list_table %}
+
+	{% if tree_nodes is not defined %}
+		{{ parent() }}
+	{% else %}
+		{% set widget_hash = random(1000000) %}
+		{% set edit_url = admin.generateUrl('edit', { id: '_ID_' }) %}
+		{% set create_url = admin.generateUrl('create', { parent: '_ID_' }) %}
+		{% set delete_url = admin.generateUrl('delete', { id: '_ID_' }) %}
+
+		{% set submissions_url = null %}
+		{% if(admin.root.child('core_attribute.admin.form_submission') is defined) %}
+			{% set formSubmissionAdmin = admin.root.child('core_attribute.admin.form_submission') %}
+			{% set submissions_url = formSubmissionAdmin.generateUrl('list', { id: '_ID_' }) %}
+		{% endif %}
+
+		<div ng-app="treeControlWidget" id="{{ widget_hash }}">
+			<div data-ng-controller="treeControlWidgetController" data-ng-init="edit_url = '{{ edit_url | escape('html_attr') }}'; create_url = '{{create_url | escape('html_attr') }}'; delete_url = '{{delete_url | escape('html_attr') }}'; submissions_url = '{{submissions_url | escape('html_attr') }}'; value = {{ tree_nodes | json_encode | escape('html_attr') }}; init();">
+
+				<!-- Nested list template -->
+				<script type="text/ng-template" id="items_renderer.html">
+
+					<div>
+						<div ui-tree-handle data-nodrag class="gb-hover-hide-sensor" style="cursor: default;">
+							<a class="btn btn-default btn-xs"
+							   data-nodrag
+							   ng-click="toggle(this);"
+							   title="{{ 'label.expand_collapse' | trans }}"
+							   data-ng-show="item.items.length > 0 || item.has_child_objects">
+									<span class="fa"
+										  ng-class="{'fa-chevron-right': collapsed || !item.items, 'fa-chevron-down': !collapsed && item.items.length }">
+									</span>
+							</a>
+
+							{% verbatim %}
+							<a href="{{ edit_url.replace('_ID_', item.id) }}" class="angular-ui-tree-node-title">{{item.label}}</a>
+							<span class="label label-default">{{item.form_type}}</span>
+							{% endverbatim %}
+
+							<div class="btn-group pull-right">
+								<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+									Action <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									{% verbatim %}
+										<li>
+											<a href="{{ edit_url.replace('_ID_', item.id) }}" data-nodrag title="{% endverbatim %}{{ 'link_edit' | trans }}{% verbatim %}">
+												<span class="fa fa-pencil"></span>
+												{% endverbatim %}{{ 'link_edit' | trans }}{% verbatim %}
+											</a>
+										</li>
+									{% endverbatim %}
+									{% verbatim %}
+										<li data-ng-show="{{ item.form_type == 'form' }}">
+											<a href="{{ create_url.replace('_ID_', item.id) }}" data-nodrag title="{% endverbatim %}{{ 'link_add_child' | trans }}{% verbatim %}">
+												<span class="fa fa-plus"></span>
+												{% endverbatim %}{{ 'link_add_child' | trans }}{% verbatim %}
+											</a>
+										</li>
+									{% endverbatim %}
+									{% verbatim %}
+										<li class="divider" data-ng-show="{{ item.parent == null }}"></li>
+										<li data-ng-show="{{ item.parent == null }}">
+											<a href="{{ submissions_url.replace('_ID_', item.id) }}" data-nodrag title="{% endverbatim %}{{ 'link_submissions' | trans }}{% verbatim %}">
+												<span class="fa fa-list"></span>
+												{% endverbatim %}{{ 'link_submissions' | trans }}{% verbatim %}
+											</a>
+										</li>
+									{% endverbatim %}
+									{% verbatim %}
+										<li class="divider"></li>
+										<li>
+											<a href="{{ delete_url.replace('_ID_', item.id) }}" data-nodrag title="{% endverbatim %}{{ 'link_delete' | trans }}{% verbatim %}">
+												<span class="fa fa-trash-o"></span>
+												{% endverbatim %}{{ 'link_delete' | trans }}{% verbatim %}
+											</a>
+										</li>
+									{% endverbatim %}
+								</ul>
+							</div>
+						</div>
+
+						<ol ui-tree-nodes="options" ng-model="item.items" ng-class="{hidden: collapsed}">
+							<li ng-repeat="item in item.items | filter:itemFilter" ui-tree-node ng-include="'items_renderer.html'"  data-ng-controller="treeControlWidgetItemController" data-ng-init="init()">
+							</li>
+						</ol>
+					</div>
+
+				</script>
+
+
+				{% verbatim %}
+				<div ui-tree="options">
+					<ol ui-tree-nodes ng-model="list" >
+						<li ng-repeat="item in list | filter:itemFilter" ui-tree-node ng-include="'items_renderer.html'"></li>
+					</ol>
+				</div>
+				<div class="clearfix"></div>
+				{% endverbatim %}
+
+			</div>
+		</div>
+
+
+		<link rel="stylesheet" href="{{ asset('bundles/coreadmin/css/angular-ui-tree.min.css') }}">
+		<link rel="stylesheet" href="{{ asset('bundles/coreadmin/css/tree.css') }}">
+		{% if app.request.xmlHttpRequest %}
+			<script>
+				Admin.log('re-bootstrapping angular form type list');
+				try {
+					angular.bootstrap($('#{{ widget_hash }}'), ['ng','treeControlWidget']);
+				}catch(e){
+					Admin.log('ERROR while re-bootstrapping ng-app', e);
+				}
+			</script>
+		{% endif %}
+	{% endif %}
+
+{% endblock %}

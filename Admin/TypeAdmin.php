@@ -216,13 +216,11 @@ class TypeAdmin extends Admin
     {
         $query = parent::createQuery($context);
 
-        if ($parentId = $this->getPersistentParameter('parent')) {
-            $query
-                ->andWhere('o.parent = :parent_id')
-                ->setParameter('parent_id', $parentId);
-        } else {
+        if (null == $this->getPersistentParameter('parent')) {
             $query
                 ->andWhere('o.parent IS NULL');
+        } else {
+            //?
         }
 
         return $query;
