@@ -6,6 +6,7 @@ namespace Core\AttributeBundle\Block\Service;
 
 use Core\AttributeBundle\Entity\FormSubmission;
 use Core\AttributeBundle\Entity\Type;
+use Core\AttributeBundle\Event\FormSubmissionEvent;
 use Core\AttributeBundle\Form\DynamicFormType;
 use Core\BlockBundle\Block\Service\BaseTransformedSettingsBlockService;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -69,12 +70,16 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 		if ($form->isSubmitted()) {
 			if ($form->isValid()) {
 				$entityManager = $this->getEntityManager();
+				/** @var Type $attributeType */
+				$attributeType = $blockContext->getBlock()->getSetting('user_form');
 
 				$formData = $form->getData();
-				$submission = $this->createSubmission($blockContext->getBlock()->getSetting('user_form'), $formData);
+				$submission = $this->createSubmission($attributeType, $formData);
+
+				$this->getDispatcher()->dispatch('dynamic_form_submission.'.$attributeType->getName(), new FormSubmissionEvent($submission));
 
 				$entityManager->persist($submission);
-				$entityManager->flush();
+				$entityManager->flush($submission);
 
 				$messages[] = array(
 					'type'      => 'success',
@@ -148,6 +153,10 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 
 	protected function getProviderChain(){
 		return $this->container->get('core_attribute.form_type_options_provider.provider_chain');
+	}
+
+	protected function getDispatcher(){
+		return $this->container->get('event_dispatcher');
 	}
 
 	/**
