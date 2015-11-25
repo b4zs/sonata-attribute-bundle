@@ -85,14 +85,17 @@ class TypeAdmin extends Admin
             $formMapper->add('parent', 'sonata_type_model_list', $options);
         }
 
-        $formMapper->add('attributeClass', 'text', array())
-            ->add('dataClass', 'text', array(
-                'required' => false,
-            ))
-            ->add('formType', 'choice', array(
-                'choices' => $this->getAvailableFormTypes(),
-            ))
-            ->end();
+        $formMapper->end();
+
+//        $formMapper
+//            ->add('attributeClass', 'text', array())
+//            ->add('dataClass', 'text', array(
+//                'required' => false,
+//            ))
+//            ->add('formType', 'choice', array(
+//                'choices' => $this->getAvailableFormTypes(),
+//            ))
+//            ->end();
 
         if($object && $object->getFormType()){
             $formMapper->with('Form options', array('class' => 'col-md-6'))
