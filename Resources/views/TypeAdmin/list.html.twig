@@ -16,8 +16,13 @@
 			{% set submissions_url = formSubmissionAdmin.generateUrl('list', { id: '_ID_' }) %}
 		{% endif %}
 
+		{% set dynamic_event_url = null %}
+		{% if(dynamic_event_listener_admin is not null) %}
+			{% set dynamic_event_url = dynamic_event_listener_admin.generateUrl('list', { event: '_EVENT_NAME_' }) %}
+		{% endif %}
+
 		<div ng-app="treeControlWidget" id="{{ widget_hash }}">
-			<div data-ng-controller="treeControlWidgetController" data-ng-init="edit_url = '{{ edit_url | escape('html_attr') }}'; create_url = '{{create_url | escape('html_attr') }}'; delete_url = '{{delete_url | escape('html_attr') }}'; submissions_url = '{{submissions_url | escape('html_attr') }}'; value = {{ tree_nodes | json_encode | escape('html_attr') }}; init();">
+			<div data-ng-controller="treeControlWidgetController" data-ng-init="edit_url = '{{ edit_url | escape('html_attr') }}'; create_url = '{{create_url | escape('html_attr') }}'; delete_url = '{{delete_url | escape('html_attr') }}'; submissions_url = '{{submissions_url | escape('html_attr') }}'; dynamic_event_url = '{{dynamic_event_url | escape('html_attr') }}'; value = {{ tree_nodes | json_encode | escape('html_attr') }}; init();">
 
 				<!-- Nested list template -->
 				<script type="text/ng-template" id="items_renderer.html">
@@ -66,6 +71,15 @@
 											<a href="{{ submissions_url.replace('_ID_', item.id) }}" data-nodrag title="{% endverbatim %}{{ 'link_submissions' | trans }}{% verbatim %}">
 												<span class="fa fa-list"></span>
 												{% endverbatim %}{{ 'link_submissions' | trans }}{% verbatim %}
+											</a>
+										</li>
+									{% endverbatim %}
+									{% verbatim %}
+										<li class="divider" data-ng-show="{{ item.parent == null }}"></li>
+										<li data-ng-show="{{ item.parent == null }}">
+											<a href="{{ dynamic_event_url.replace('_EVENT_NAME_', item.submission_event_name) }}" data-nodrag title="{% endverbatim %}{{ 'link_events' | trans }}{% verbatim %}">
+												<span class="fa fa-bell"></span>
+												{% endverbatim %}{{ 'link_events' | trans }}{% verbatim %}
 											</a>
 										</li>
 									{% endverbatim %}

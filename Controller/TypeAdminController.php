@@ -55,12 +55,15 @@ class TypeAdminController extends CRUDController
 		// set the theme for the current Admin Form
 		$this->get('twig')->getExtension('form')->renderer->setTheme($formView, $this->admin->getFilterTheme());
 
+		$dynamicEventListenerAdmin = $this->container->has('core_dynamic_event_listener.admin.dynamic_event_listener')? $this->get('core_dynamic_event_listener.admin.dynamic_event_listener') : null;
+
 		return $this->render($this->admin->getTemplate('list'), array(
 			'action'     => 'list',
 			'form'       => $formView,
 			'datagrid'   => $datagrid,
 			'csrf_token' => $this->getCsrfToken('sonata.batch'),
 			'tree_nodes'  => $treeNodes,
+			'dynamic_event_listener_admin' => $dynamicEventListenerAdmin,
 		));
 	}
 
@@ -71,6 +74,7 @@ class TypeAdminController extends CRUDController
 			'label' 	=> $type->getLabel()?:$type->getName(),
 			'form_type' => $type->getFormType(),
 			'parent' 	=> $type->getParent()?$type->getParent()->getId():null,
+			'submission_event_name' => 'dynamic_form_submission.'.$type->getName(),
 		);
 
 	}
