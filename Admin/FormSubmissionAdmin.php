@@ -5,6 +5,7 @@ namespace Core\AttributeBundle\Admin;
 use Core\AttributeBundle\Entity\FormSubmission;
 use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Form\DynamicFormType;
+use Core\AttributeBundle\Utils\TypeHelper;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -129,7 +130,7 @@ class FormSubmissionAdmin extends Admin
 
         $type = $this->getParent()->getSubject();
 
-        $paths = $this->buildExportFields($type);
+        $paths = TypeHelper::flattenType($type);
 
         $paths = array_map(function($n){
             return str_replace(current(explode('.', $n)), 'collection', $n).'.value';
@@ -137,31 +138,5 @@ class FormSubmissionAdmin extends Admin
 
         return array_merge(array('id', 'createdAt'),$paths);
     }
-
-    /**
-     * @param $type Type
-     * @param $out array
-     * @return array
-     */
-    private function buildExportFields($type, $out = array()){
-
-        foreach($type->getChildren() as $child){
-            if($type->getChildren()->count()){
-                $out = $this->buildExportFields($child, $out);
-            }
-        }
-
-        if($type->getChildren()->count() == 0){
-            $current = $type;
-            $a = array($current->getName());
-            while ($current = $current->getParent()) {
-                $a[] = $current->getName();
-            }
-            $out[$type->getLabel().'_'.$type->getId()] = implode('.',array_reverse($a));
-        }
-
-        return $out;
-    }
-
 
 }
