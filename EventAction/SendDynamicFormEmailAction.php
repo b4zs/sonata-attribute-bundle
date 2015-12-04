@@ -91,7 +91,7 @@ class SendDynamicFormEmailAction extends SendEmailAction
             'sonata_help' => $bodySonataHelp,
         ));
         $formBuilder->add('template', 'choice', array(
-            'choices' => is_array($this->templates)?$this->templates:array(),
+            'choices' => $this->getTemplates(),
             'required' => false,
         ));
 
