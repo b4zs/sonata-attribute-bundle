@@ -42,6 +42,14 @@ services:
             - { name: kernel.event_listener, event: core_attribute.option_resolve, method: resolve  }
             - { name: kernel.event_listener, event: core_attribute.option_resolve_attr, method: resolveAttr  }
 
+    ### Event Action ###
+    core_attribute.event_action.send_dynamic_form_email:
+        class: Core\AttributeBundle\EventAction\SendDynamicFormEmailAction
+        calls:
+            - [ setContainer, [@service_container] ]
+        tags:
+            - { name: dynamic_event.action }
+
     ### Form type ###
     core_attribute.form.form_options:
         class: Core\AttributeBundle\Form\FormOptionsType
