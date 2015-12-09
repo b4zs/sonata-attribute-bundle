@@ -43,6 +43,16 @@ class FormSubmissionAdmin extends Admin
     }
 
     /**
+     * @param $object
+     */
+    public function preUpdate($object)
+    {
+        /** @var FormSubmission $object */
+        $object->setUpdatedAt(new \DateTime());
+        parent::preUpdate($object);
+    }
+
+    /**
      * @param ListMapper $listMapper
      */
     protected function configureListFields(ListMapper $listMapper)
