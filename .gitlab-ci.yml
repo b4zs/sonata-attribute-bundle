@@ -1,0 +1,5 @@
+image: 'bobey/docker-gitlab-ci-runner-php5.6'
+before_script:
+  - 'composer install -vvv --prefer-dist -n'
+unit_tests:
+  script: 'php vendor/phpunit/phpunit/phpunit -vvv'

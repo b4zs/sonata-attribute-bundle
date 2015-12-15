@@ -35,9 +35,9 @@ security:
 #            level: debug
 
 
-#parameters:
-#    sonata.media.media.class: null
-#    sonata.media.media.class: null
+parameters:
+    sonata.media.media.class: Sonata\MediaBundle\Tests\Entity\Media
+    sonata.media.admin.media.entity: %sonata.media.media.class%
 
 sonata_media:
     default_context: default

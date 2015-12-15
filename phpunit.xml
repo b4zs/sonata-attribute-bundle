@@ -11,10 +11,10 @@
     processIsolation            = "false"
     stopOnFailure               = "true"
     syntaxCheck                 = "false"
-    bootstrap                   = "Tests/TestKernel.php" >
+    bootstrap                   = "Tests/bootstrap.php" >
 
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="Core:AttributeBundle Test Suite">
             <directory>Tests</directory>
         </testsuite>
     </testsuites>
@@ -22,17 +22,4 @@
     <php>
         <server name="KERNEL_DIR" value="Tests/" />
     </php>
-
-    <filter>
-        <whitelist>
-            <!--<directory>../src</directory>-->
-            <!--<exclude>-->
-                <!--<directory>../src/*/*Bundle/Resources</directory>-->
-                <!--<directory>../src/*/*Bundle/Tests</directory>-->
-                <!--<directory>../src/*/Bundle/*Bundle/Resources</directory>-->
-                <!--<directory>../src/*/Bundle/*Bundle/Tests</directory>-->
-            <!--</exclude>-->
-        </whitelist>
-    </filter>
-
 </phpunit>

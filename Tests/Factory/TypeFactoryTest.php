@@ -1,24 +1,20 @@
 <?php
-namespace Core\AttributeBundle\Tests;
+namespace Core\AttributeBundle\Tests\Factory;
 
 use Core\AttributeBundle\Factory\TypeFactory;
+use Core\AttributeBundle\Tests\KernelAwareFormTypeTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class TypeFactoryTest extends KernelTestCase{
-
-    /** @var ContainerInterface */
-    private $container;
-
+class TypeFactoryTest extends KernelAwareFormTypeTestCase
+{
     /** @var TypeFactory */
     private $typeFactory;
 
     public function setUp() {
-        self::bootKernel();
+        parent::setUp();
 
-        $this->container = static::$kernel->getContainer();
         $this->typeFactory = $this->container->get('core_attribute.factory.type');
-
     }
 
     /**

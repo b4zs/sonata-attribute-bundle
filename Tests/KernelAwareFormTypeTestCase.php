@@ -2,33 +2,27 @@
 
 namespace Core\AttributeBundle\Tests;
 
-
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Forms;
+use Symfony\Component\Routing\Loader\YamlFileLoader;
+use Symfony\Component\Yaml\Yaml;
 
 abstract class KernelAwareFormTypeTestCase extends KernelTestCase
 {
-
     /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @var FormFactoryInterface
-     */
+    /** @var FormFactoryInterface */
     protected $factory;
 
-    /**
-     * @var FormBuilder
-     */
+    /** @var FormBuilder */
     protected $builder;
 
-    /**
-     * @var EventDispatcher
-     */
+    /** @var EventDispatcher */
     protected $dispatcher;
 
     protected function setUp()
@@ -45,6 +39,12 @@ abstract class KernelAwareFormTypeTestCase extends KernelTestCase
         $this->container = static::$kernel->getContainer();
     }
 
+    protected static function createKernel(array $options = array())
+    {
+        return new \TestKernel('test', 'debug', str_replace('\\','-', get_called_class()).'-'.getmypid());
+    }
+
+
     public static function assertDateTimeEquals(\DateTime $expected, \DateTime $actual)
     {
         self::assertEquals($expected->format('c'), $actual->format('c'));
@@ -54,5 +54,4 @@ abstract class KernelAwareFormTypeTestCase extends KernelTestCase
     {
         return array();
     }
-
 }

@@ -1,5 +1,3 @@
-/Tests/logs
-/Tests/cache
 /composer.lock
 /.idea
 /vendor
