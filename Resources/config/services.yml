@@ -6,7 +6,7 @@ services:
         class: Core\AttributeBundle\Admin\TypeAdmin
         arguments: [~, Core\AttributeBundle\Entity\Type, CoreAttributeBundle:TypeAdmin]
         calls:
-            - [addChild, [@core_attribute.admin.form_submission]]
+            - [addChild, ['@core_attribute.admin.form_submission']]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Form, label: Collections}
 
@@ -22,7 +22,7 @@ services:
         class: Core\AttributeBundle\Block\Service\FormBlockService
         arguments:
             - 'Form'
-            - @templating
+            - '@templating'
         calls:
             - [setContainer, ['@service_container']]
         tags:
@@ -46,7 +46,7 @@ services:
     core_attribute.event_action.send_dynamic_form_email:
         class: Core\AttributeBundle\EventAction\SendDynamicFormEmailAction
         calls:
-            - [ setContainer, [@service_container] ]
+            - [ setContainer, ['@service_container'] ]
         tags:
             - { name: dynamic_event.action }
 
@@ -54,8 +54,8 @@ services:
     core_attribute.form.form_options:
         class: Core\AttributeBundle\Form\FormOptionsType
         arguments:
-            - @core_attribute.form_type_options_provider.provider_chain
-            - @event_dispatcher
+            - '@core_attribute.form_type_options_provider.provider_chain'
+            - '@event_dispatcher'
         tags:
             - { name: form.type, alias: form_options }
 
@@ -63,7 +63,7 @@ services:
     core_attribute.factory.type:
         class: Core\AttributeBundle\Factory\TypeFactory
         arguments:
-            - @core_attribute.form_type_options_provider.provider_chain
+            - '@core_attribute.form_type_options_provider.provider_chain'
 
     ### Twig Extensions ###
     core_attribute.twig.extension.attribute:

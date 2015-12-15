@@ -6,7 +6,23 @@
   "autoload": {
     "psr-4": { "Core\\AttributeBundle\\": "" }
   },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "http://gitlab.assist01.gbart.h3.hu/satis"
+    }
+  ],
   "require": {
-    "sonata/tools-bundle": "dev-master"
+    "sonata/tools-bundle": "dev-master",
+    "symfony/form": "~2.7",
+    "symfony/validator": "~2.7",
+    "sonata-project/media-bundle": "~2.3",
+    "symfony/twig-bundle": "~2.7",
+    "doctrine/orm": "2.5.*@dev",
+    "doctrine/doctrine-bundle": "~1.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*",
+    "symfony/finder": "~2.8"
   }
 }
