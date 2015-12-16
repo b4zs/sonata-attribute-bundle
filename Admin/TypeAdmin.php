@@ -75,9 +75,12 @@ class TypeAdmin extends Admin
 
         $formMapper
             ->with('General', array('class' => 'col-md-6'))
-            ->add('name')
             ->add('label', null, array(
-                'required' => false,
+                'required' => true,
+            ))
+            ->add('name', null, array(
+                'label' => 'Technical name',
+                'sonata_help' => 'must be unique',
             ));
 
         if($object){
@@ -101,6 +104,7 @@ class TypeAdmin extends Admin
             $formMapper->with('Form options', array('class' => 'col-md-6'))
                 ->add('formOptions', 'form_options', array(
                     'form_type' => $object->getFormType(),
+                    'required' => false,
                 ));
         }
 
