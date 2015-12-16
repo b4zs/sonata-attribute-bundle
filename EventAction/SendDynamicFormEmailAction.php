@@ -100,7 +100,7 @@ class SendDynamicFormEmailAction extends SendEmailAction
         ));
         $formBuilder->add('template', 'choice', array(
             'choices' => $this->getTemplates(),
-            'required' => false,
+            'required' => true,
         ));
 
     }
