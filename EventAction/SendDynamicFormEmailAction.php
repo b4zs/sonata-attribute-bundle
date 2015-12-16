@@ -67,14 +67,22 @@ class SendDynamicFormEmailAction extends SendEmailAction
 
         $eventName = $options['event_name'];
 
-        $rootType = $this->guessFormTypeFromEventName($eventName);
-        $inputPaths = TypeHelper::flattenType($rootType);
-        $bodySonataHelp = 'Available placeholders:'. PHP_EOL .implode(array_map(
-            function($n){
-                return '['.$n.']';
-            },
-            $inputPaths
-        ), PHP_EOL);
+        $placeholders = array(
+            '[current_date_time]',
+        );
+
+        if(null !== $eventName){
+            $rootType = $this->guessFormTypeFromEventName($eventName);
+            $inputPaths = TypeHelper::flattenType($rootType);
+            $placeholders = $placeholders+array_map(
+                function($n){
+                    return '['.$n.']';
+                },
+                $inputPaths
+            );
+        }
+
+        $bodySonataHelp = 'Available placeholders:'. PHP_EOL .implode($placeholders, PHP_EOL);
 
         $formBuilder->add('from_email', 'email', array(
             'constraints' => array(
