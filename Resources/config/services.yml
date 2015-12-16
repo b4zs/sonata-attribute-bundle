@@ -8,7 +8,7 @@ services:
         calls:
             - [addChild, ['@core_attribute.admin.form_submission']]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Form, label: Collections}
+            - {name: sonata.admin, manager_type: orm, group: Form, label: Types}
 
     core_attribute.admin.form_submission:
         class: Core\AttributeBundle\Admin\FormSubmissionAdmin

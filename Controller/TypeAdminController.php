@@ -14,12 +14,20 @@ class TypeAdminController extends CRUDController
 		$request = $this->container->get('request');
 		$isGet = $request->isMethod('GET');
 		$preset = $request->get('preset');
+		$parent = $request->get('parent');
 		if (null === $preset && $isGet) {
 			/** @var TypeAdmin $admin */
 			$admin = $this->admin;
 
 			$optionsProviderChain = $this->get('core_attribute.form_type_options_provider.provider_chain');
 			$presetNames = array_keys($optionsProviderChain->getProviders());
+
+			if(null === $parent){
+				$presetNames = array_intersect(
+					array('form'),
+					$presetNames
+				);
+			}
 
 			return $this->render('CoreAttributeBundle:TypeAdmin:create_preset_selector.html.twig', array(
 				'presets' => array_combine($presetNames, $presetNames),
