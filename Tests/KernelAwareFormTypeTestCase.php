@@ -41,7 +41,7 @@ abstract class KernelAwareFormTypeTestCase extends KernelTestCase
 
     protected static function createKernel(array $options = array())
     {
-        return new \TestKernel('test', 'debug', str_replace('\\','-', get_called_class()).'-'.getmypid());
+        return new \TestKernel('test', 'debug', 't'.str_replace('\\','', get_called_class()).'-'.getmypid());
     }
 
 

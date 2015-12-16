@@ -19,6 +19,7 @@ class TestKernel extends Symfony\Component\HttpKernel\Kernel
 
 	public function __construct($environment, $debug, $testCase)
 	{
+		$this->name = 'test';
 		parent::__construct($environment, $debug);
 		$this->testCase = $testCase;
 	}
@@ -44,6 +45,6 @@ class TestKernel extends Symfony\Component\HttpKernel\Kernel
 
 	public function getRootDir()
 	{
-		return sys_get_temp_dir().self::VERSION.'/'.$this->testCase;
+		return sys_get_temp_dir().'/'.self::VERSION.'/'.$this->testCase.'/';
 	}
 }
