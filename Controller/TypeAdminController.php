@@ -4,7 +4,9 @@ namespace Core\AttributeBundle\Controller;
 
 use Core\AttributeBundle\Admin\TypeAdmin;
 use Core\AttributeBundle\Entity\Type;
+use Core\AttributeBundle\Utils\TypeHelper;
 use Sonata\AdminBundle\Controller\CRUDController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class TypeAdminController extends CRUDController
@@ -53,7 +55,7 @@ class TypeAdminController extends CRUDController
 		$datagrid = $this->admin->getDatagrid();
 		$formView = $datagrid->getForm()->createView();
 
-		$data = $datagrid->getQuery()->execute(array());
+		$data = $datagrid->getQuery()->execute();
 		$treeNodes = array_map(array($this, 'buildBlockData'), $data);
 		$treeNodes = $this->buildNodesHierarchy($treeNodes, $parentId);
 
@@ -126,5 +128,39 @@ class TypeAdminController extends CRUDController
 
 		return $result;
 	}
+
+	/**
+	 * @param Type $object
+	 * @return RedirectResponse
+	 */
+	protected function redirectTo($object)
+	{
+
+		if($object->getId()){
+
+			$rootType = current($object->buildPath());
+			if($rootType){
+				$params = array(
+					'parent' => $rootType->getId()
+				);
+
+				if (null !== $this->get('request')->get('btn_update_and_list')) {
+					$url = $this->admin->generateUrl('list', $params);
+					return new RedirectResponse($url);
+				}
+				if (null !== $this->get('request')->get('btn_create_and_list')) {
+					$url = $this->admin->generateUrl('list', $params);
+					return new RedirectResponse($url);
+				}
+			}
+
+		}
+
+		return parent::redirectTo($object);
+
+	}
+
+
+
 
 }

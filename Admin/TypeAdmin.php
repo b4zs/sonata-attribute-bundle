@@ -4,6 +4,7 @@ namespace Core\AttributeBundle\Admin;
 
 
 use Core\AttributeBundle\Entity\Type;
+use Doctrine\ORM\QueryBuilder;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -16,6 +17,8 @@ use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 
 class TypeAdmin extends Admin
 {
+
+    protected $maxPerPage = 99999;
 
     protected function configureRoutes(RouteCollection $collection)
     {
@@ -221,9 +224,10 @@ class TypeAdmin extends Admin
 
     public function createQuery($context = 'list')
     {
+        /** @var QueryBuilder $query */
         $query = parent::createQuery($context);
 
-        if (null == $this->getPersistentParameter('parent')) {
+        if (null === $this->getPersistentParameter('parent')) {
             $query
                 ->andWhere('o.parent IS NULL');
         } else {
