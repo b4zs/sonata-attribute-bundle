@@ -33,7 +33,7 @@ class ExportTypeCommand extends ContainerAwareCommand
 
             $output->writeln(sprintf('<comment>Writing %s ...</comment>', $filename));
 
-            $serializedType = $this->serialize($type, true);
+            $serializedType = $this->serialize($type);
             $yaml = Yaml::dump($serializedType, 99, 2);
             $fs->dumpFile($filename, $yaml);
 
@@ -42,33 +42,20 @@ class ExportTypeCommand extends ContainerAwareCommand
 
     }
 
-    private function serialize(Type $type, $includeRoot = false, $out = array()){
+    private function serialize(Type $type)
+    {
+        $typeArray = $this->typeToArray($type);
 
-        if(null == $type->getParent() && $includeRoot){
-
-            $data = $this->typeToArray($type);
-            $data['__children'] = $type->getChildren()->count() ? $this->serialize($type) : array();
-
-            $out[] = $data;
-
-        }elseif(!$includeRoot){
+        if($type->getChildren()->count()){
 
             /** @var Type $child */
             foreach($type->getChildren() as $child){
-
-                $data = $this->typeToArray($child);
-                $data['__children'] = array();
-
-                if($child->getChildren()->count()){
-                    $data['__children'] = $this->serialize($child);
-                }
-
-                $out[] = $data;
+                $typeArray['__children'][] = $this->serialize($child);
             }
 
         }
 
-        return $out;
+        return $typeArray;
     }
 
     private function typeToArray(Type $type){
@@ -83,6 +70,7 @@ class ExportTypeCommand extends ContainerAwareCommand
             'label' => $type->getLabel(),
             'position' => $type->getPosition(),
             'options' => $formOptions,
+            '__children' => array(),
         );
     }
 
