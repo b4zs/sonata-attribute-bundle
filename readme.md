@@ -1,6 +1,6 @@
 # Updates
 
-### v2
+### v1.0.1
 
 - added features:
     - yml export:
