@@ -84,6 +84,7 @@ class TypeAdmin extends Admin
             ->add('name', null, array(
                 'label' => 'Technical name',
                 'sonata_help' => 'must be unique',
+                'read_only' => null !== $this->getSubject()->getId(),
             ));
 
         if($object){

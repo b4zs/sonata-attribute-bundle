@@ -42,6 +42,12 @@ services:
             - { name: kernel.event_listener, event: core_attribute.option_resolve, method: resolve  }
             - { name: kernel.event_listener, event: core_attribute.option_resolve_attr, method: resolveAttr  }
 
+    core_attribute.event_listener.type_name_generator:
+        class: Core\AttributeBundle\EventListener\TypeNameGeneratorEventListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+
     ### Event Action ###
     core_attribute.event_action.send_dynamic_form_email:
         class: Core\AttributeBundle\EventAction\SendDynamicFormEmailAction
