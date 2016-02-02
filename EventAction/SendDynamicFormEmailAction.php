@@ -2,16 +2,21 @@
 
 namespace Core\AttributeBundle\EventAction;
 
-use Core\AttributeBundle\Entity\FormSubmission;
-use Core\AttributeBundle\Entity\Type;
-use Core\AttributeBundle\Event\FormSubmissionEvent;
-use Core\AttributeBundle\Utils\TypeHelper;
-use Core\DynamicEventListenerBundle\EventAction\SendEmailAction;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Validator\Constraints\Email;
+use Core\AttributeBundle\Entity\FormSubmission;
+use Core\AttributeBundle\Entity\Type;
+use Core\AttributeBundle\Event\FormSubmissionEvent;
+use Core\AttributeBundle\Utils\TypeHelper;
+use Core\DynamicEventListenerBundle\Entity\DynamicEventListener;
+use Core\DynamicEventListenerBundle\EventAction\SendEmailAction;
 
+/**
+ * Class SendDynamicFormEmailAction
+ * @package Core\AttributeBundle\EventAction
+ */
 class SendDynamicFormEmailAction extends SendEmailAction
 {
     public function getLabel()
@@ -26,8 +31,14 @@ class SendDynamicFormEmailAction extends SendEmailAction
         );
     }
 
-    public function processEvent(Event $event, $params)
+    /**
+     * @param Event $event
+     * @param DynamicEventListener $listenerEntity
+     */
+    public function processEvent(Event $event, DynamicEventListener $listenerEntity)
     {
+        $params = $listenerEntity->getParams();
+
         if(!isset($params['from_email'])){
             throw new \InvalidArgumentException('Parameter "from_email" must be set');
         }
