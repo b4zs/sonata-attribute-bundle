@@ -17,7 +17,7 @@ use Symfony\Component\Yaml\Yaml;
 class ImportTypeCommand extends ContainerAwareCommand
 {
 
-    const REQUIRED_FIELDS = array('preset_alias', 'name', 'label', 'position', 'options');
+    private static $requiredFields = array('preset_alias', 'name', 'label', 'position', 'options');
 
     /** @var TypeFactory */
     private $typeFactory;
@@ -153,8 +153,8 @@ class ImportTypeCommand extends ContainerAwareCommand
      */
     private function validateTypeArray(array $type)
     {
-        if($missingFields = array_diff(self::REQUIRED_FIELDS, array_keys($type))){
-            throw new \InvalidArgumentException(sprintf('All the form type definition must contain the following keys: %s, missing: %s', json_encode(self::REQUIRED_FIELDS), json_encode(array_values($missingFields))));
+        if($missingFields = array_diff(self::$requiredFields, array_keys($type))){
+            throw new \InvalidArgumentException(sprintf('All the form type definition must contain the following keys: %s, missing: %s', json_encode(self::$requiredFields), json_encode(array_values($missingFields))));
         }
     }
 
