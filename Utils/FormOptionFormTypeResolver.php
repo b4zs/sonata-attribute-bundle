@@ -13,6 +13,10 @@ class FormOptionFormTypeResolver implements FormOptionFormTypeResolverInterface{
         $builderParameters = array('child' => $option, 'type' => null, 'options' => array('required' => false));
 
         switch($option):
+            case 'success_flash':
+                $builderParameters = array_replace_recursive($builderParameters, array(
+                    'options' => array('sonata_help' => 'Placeholders: <br>[current_datetime] = Date and time of submission',)
+                ));
             case 'value_class':
             case 'attribute_class':
             case 'data_class':

@@ -2,12 +2,15 @@
 
 namespace Core\AttributeBundle\Form;
 
+use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Event\FormOptionResolveEvent;
 use Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain;
 use Core\AttributeBundle\Utils\FormOptionFormTypeResolver;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FormOptionsType extends AbstractType{
@@ -66,6 +69,17 @@ class FormOptionsType extends AbstractType{
 
             }
         }
+
+        //success flash remove on forms with parent form(only root form have success_flash)
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) {
+            /** @var Type $data */
+            $data = $event->getForm()->getParent()->getData();
+            if(null !== $data) {
+                if('form' === $data->getFormType() && null !== $data->getParent()) {
+                    $event->getForm()->remove('success_flash');
+                }
+            }
+        });
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

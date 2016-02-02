@@ -83,7 +83,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 
 				$messages[] = array(
 					'type'      => 'success',
-					'message'   => $this->getTranslator()->trans('message.form_submitted')
+					'message'   => $this->getTranslator()->trans($this->getFlashMessage($blockContext->getBlock()))
 				);
 
 				$form = $this->createForm($blockContext->getBlock());
@@ -191,6 +191,36 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 
 		$rootForm = $formFactory->createBuilder(new DynamicFormType($this->getProviderChain(), $rootType), null, $rootFormOptions)->getForm();
 		return $rootForm;
+	}
+
+	/**
+	 * @param BlockInterface $block
+	 * @return string
+	 */
+	protected function getFlashMessage(BlockInterface $block) {
+
+		/** @var Type $rootType */
+		$rootType = $block->getSetting('user_form');
+
+		$options = $rootType->getFormOptions();
+
+		if(!array_key_exists('success_flash', $options) || '' === $options['success_flash']) {
+			return 'message.form_submitted';
+		}
+
+		if(false !== strpos($options['success_flash'], '[current_datetime]')) {
+			$now = new \DateTime();
+			$options['success_flash'] = str_replace('[current_datetime]', $now->format($this->getDefaultDateTimeFormat()), $options['success_flash']);
+		}
+		return $options['success_flash'];
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getDefaultDateTimeFormat()
+	{
+		return 'Y-M-d H:i:s';
 	}
 
 	/**
