@@ -85,11 +85,17 @@ class TypeAdmin extends Admin
                 'label' => 'Technical name',
                 'sonata_help' => 'must be unique',
                 'read_only' => null !== $this->getSubject()->getId(),
-            ));
+            ))
+        ;
 
         if($object){
             $options = $object->getFormType() == 'form'?array('required' => false):array();
             $formMapper->add('parent', 'sonata_type_model_list', $options);
+
+            if(null !== $object->getParent()){
+                $formMapper->add('position', 'integer');
+            }
+
         }
 
         $formMapper->end();
@@ -227,6 +233,7 @@ class TypeAdmin extends Admin
     {
         /** @var QueryBuilder $query */
         $query = parent::createQuery($context);
+        $query->orderBy('o.position');
 
         if (null === $this->getPersistentParameter('parent')) {
             $query
