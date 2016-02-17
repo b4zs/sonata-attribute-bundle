@@ -7,6 +7,7 @@ services:
         arguments: [~, Core\AttributeBundle\Entity\Type, CoreAttributeBundle:TypeAdmin]
         calls:
             - [addChild, ['@core_attribute.admin.form_submission']]
+            - [setFormTheme, [ ['CoreAttributeBundle:TypeAdmin:form_admin_fields.html.twig'] ]]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Form, label: Types}
 

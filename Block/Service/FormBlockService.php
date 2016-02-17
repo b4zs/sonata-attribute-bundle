@@ -256,4 +256,4 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 			$response
 		);
 	}
-} 
+}

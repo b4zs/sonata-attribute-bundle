@@ -4,10 +4,12 @@ namespace Core\AttributeBundle\Form;
 
 use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Event\FormOptionResolveEvent;
+use Core\AttributeBundle\FormTypeOptionsProvider\ChoiceProviderInterface;
 use Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain;
 use Core\AttributeBundle\Utils\FormOptionFormTypeResolver;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -80,6 +82,44 @@ class FormOptionsType extends AbstractType{
                 }
             }
         });
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($provider){
+
+            if(!$event->getForm()->has('preferred_choices')){
+                return;
+            }
+
+            /** @var Type $data */
+            $data = $event->getForm()->getParent()->getData();
+
+            $preferredChoicesField = $event->getForm()->get('preferred_choices');
+            $preferredChoices = array();
+
+            if(null !== $data) {
+                $dataFormOptions = $data->getFormOptions();
+
+                if(array_key_exists('choices', $dataFormOptions) && is_array($dataFormOptions['choices'])){
+                    $preferredChoices = $dataFormOptions['choices'];
+                }elseif($provider instanceof ChoiceProviderInterface){
+                    if(is_array($provider->getPreferredOptions())){
+                        $preferredChoices = $provider->getPreferredOptions();
+                    }
+                }
+            }
+
+            if(count($preferredChoices)){
+                $event->getForm()->remove('preferred_choices');
+                $options = $preferredChoicesField->getConfig()->getOptions();
+
+                $options['choices'] = $preferredChoices;
+                unset($options['choice_list']);
+                unset($options['choice_label']);
+
+                $event->getForm()->add('preferred_choices', $preferredChoicesField->getConfig()->getType()->getName(), $options);
+            }
+
+        });
+
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

@@ -122,9 +122,19 @@ class FormOptionFormTypeResolver implements FormOptionFormTypeResolverInterface{
                 ));
                 break;
             case 'choices':
+                $builderParameters = array_replace_recursive($builderParameters, array(
+                    'type' => 'burgov_key_value',
+                    'options' => array(
+                        'value_type' => 'text',
+                    )
+                ));
+                break;
             case 'preferred_choices':
                 $builderParameters = array_replace_recursive($builderParameters, array(
-                    'type' => 'yaml_array',
+                    'type' => 'choice',
+                    'options' => array(
+                        'multiple' => true,
+                    )
                 ));
                 break;
             default:

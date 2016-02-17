@@ -2,7 +2,7 @@
 
 namespace Core\AttributeBundle\FormTypeOptionsProvider;
 
-class Choice extends AbstractProvider{
+class Choice extends AbstractProvider implements ChoiceProviderInterface{
 
     public function getOptions(){
         $defaultOptions = parent::getOptions();
@@ -16,6 +16,11 @@ class Choice extends AbstractProvider{
             'expanded' => false,
             'multiple' => false,
         ));
+    }
+
+    public function getPreferredOptions()
+    {
+        return array();
     }
 
 }
