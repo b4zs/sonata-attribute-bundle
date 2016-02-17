@@ -10,7 +10,7 @@ Core\AttributeBundle\Entity\Type:
         name:
             type:     string
             length:   255
-            unique:   true
+#            unique:   true
         label:
             type:     string
             length:   255
