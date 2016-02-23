@@ -4,6 +4,7 @@ namespace Core\AttributeBundle\Twig\Extension;
 
 use Core\AttributeBundle\Entity\Attribute;
 use Core\AttributeBundle\Entity\CollectionAttribute;
+use Core\AttributeBundle\Entity\Type;
 
 class AttributeExtension extends \Twig_Extension
 {
@@ -33,7 +34,8 @@ class AttributeExtension extends \Twig_Extension
                 $this->collectionAttributeToArray($collectionValue, $out);
             }else{
                 if(is_scalar($collectionValue->getValue()) || is_callable(array($collectionValue->getValue(), '__toString'))){
-                    $out[] = array(
+                    $path = $this->getPath($collectionValue);
+                    $out[$path] = array(
                         'label' => $collectionValue->getType()->getLabel()?:$collectionValue->getType()->getName(),
                         'value' => (string)$collectionValue->getValue()
                     );
@@ -47,5 +49,20 @@ class AttributeExtension extends \Twig_Extension
     public function getName()
     {
         return 'attribute';
+    }
+
+    /**
+     * @param Attribute $collectionValue
+     * @return array|string
+     */
+    private function getPath($collectionValue)
+    {
+        $path = array();
+        /** @var Type $type */
+        foreach ($collectionValue->getType()->buildPath() as $type) {
+            $path[] = $type->getName();
+        }
+        $path = implode('.', $path);
+        return $path;
     }
 }
