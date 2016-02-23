@@ -178,3 +178,9 @@ services:
             - %sonata.media.admin.media.entity%
         tags:
             - { name: dynamic_form.options_provider, alias: core_media_file_input }
+
+    ### Model Builder ###
+    core_attribute.model_builder.form_submission_index:
+        class: Core\AttributeBundle\ModelBuilder\FormSubmissionIndexBuilder
+        tags:
+            - { name: model_builder, class: 'Core\AttributeBundle\Entity\FormSubmission' }
