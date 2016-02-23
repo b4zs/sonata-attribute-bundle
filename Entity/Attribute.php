@@ -14,6 +14,11 @@ abstract class Attribute
 	/** @var  CollectionAttribute */
 	protected $parent;
 
+	function __toString()
+	{
+		return (string)$this->getValue();
+	}
+
 	public function getId()
 	{
 		return $this->id;
