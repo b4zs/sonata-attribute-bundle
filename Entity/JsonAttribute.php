@@ -9,6 +9,15 @@ class JsonAttribute extends Attribute
 	/** @var string */
 	protected $jsonValue;
 
+	function __toString()
+	{
+		if(is_scalar($this->getValue())){
+			return $this->getValue();
+		}
+
+		return json_encode($this->getValue());
+	}
+
 	/**
 	 * @return string
 	 */
