@@ -14,6 +14,8 @@ class Email extends Text{
     {
         $constraints = parent::buildConstraintsArray($options);
         $constraints[] = new ConstraintWrapper(new \Symfony\Component\Validator\Constraints\Email());
+
+        return $constraints;
     }
 
 }
