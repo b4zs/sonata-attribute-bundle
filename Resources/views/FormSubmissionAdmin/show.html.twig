@@ -6,7 +6,9 @@
         {% for attribute in attribute(object, field_name)|flatten_collection_attribute %}
             <tr class="sonata-ba-view-container">
                 <th>{{ attribute.label }}</th>
-                <td>{{ attribute.value }}</td>
+                <td>
+                    {% include attribute.template with {'value': attribute.value} %}
+                </td>
             </tr>
         {% endfor %}
     {% else %}
