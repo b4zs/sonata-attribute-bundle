@@ -6,6 +6,7 @@ use Core\AttributeBundle\Entity\FormSubmission;
 use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Form\DynamicFormType;
 use Core\AttributeBundle\Utils\TypeHelper;
+use Doctrine\Common\Util\Debug;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -57,6 +58,8 @@ class FormSubmissionAdmin extends Admin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
+        $this->disableFilterForEntity('soft_deleteable','Core\AttributeBundle\Entity\Type');
+
         $listMapper
             ->add('collection.type.label')
             ->add('collection', null, array(
@@ -79,6 +82,7 @@ class FormSubmissionAdmin extends Admin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $this->disableFilterForEntity('soft_deleteable','Core\AttributeBundle\Entity\Type');
         $collectionFormType = $this->createFormType();
 
         $formMapper->add('collection', $collectionFormType, array(
@@ -93,6 +97,7 @@ class FormSubmissionAdmin extends Admin
      */
     protected function configureShowFields(ShowMapper $filter)
     {
+        $this->disableFilterForEntity('soft_deleteable','Core\AttributeBundle\Entity\Type');
         $filter
             ->add('collection.type.label')
             ->add('createdAt')
@@ -147,6 +152,13 @@ class FormSubmissionAdmin extends Admin
         },$paths);
 
         return array_merge(array('id', 'createdAt'),$paths);
+    }
+
+    protected function disableFilterForEntity($filterName, $entity)
+    {
+        /** @var \Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter $filter */
+        $filter = $this->getConfigurationPool()->getContainer()->get('doctrine.orm.entity_manager')->getFilters()->getFilter($filterName);
+        $filter->disableForEntity($entity);
     }
 
 }

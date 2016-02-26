@@ -25,6 +25,8 @@ class Type
 
 	private $formOptions = array();
 
+	private $deletedAt;
+
 	/** @var  Collection */
 	private $children;
 
@@ -141,6 +143,22 @@ class Type
 	public function setDataClass($dataClass)
 	{
 		$this->dataClass = $dataClass;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getDeletedAt()
+	{
+		return $this->deletedAt;
+	}
+
+	/**
+	 * @param mixed $deletedAt
+	 */
+	public function setDeletedAt($deletedAt)
+	{
+		$this->deletedAt = $deletedAt;
 	}
 
 	function __toString()
