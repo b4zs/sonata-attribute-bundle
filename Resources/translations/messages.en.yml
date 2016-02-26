@@ -7,4 +7,4 @@ link_delete: Delete
 link_show: Show
 link_events: Events
 label.form_data: Formdata
-message.form_submitted: The form have been successfully submitted
+message.form_submitted: The form has been successfully submitted
