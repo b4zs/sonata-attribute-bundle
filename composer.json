@@ -13,7 +13,7 @@
     }
   ],
   "require": {
-    "sonata/tools-bundle": "1.0.*",
+    "sonata/tools-bundle": "1.0.*|master@dev",
     "octet/reference-object": "master@dev",
     "symfony/form": "~2.7",
     "symfony/validator": "~2.7",
