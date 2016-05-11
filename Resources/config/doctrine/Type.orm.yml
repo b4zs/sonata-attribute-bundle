@@ -6,6 +6,9 @@ Core\AttributeBundle\Entity\Type:
             type: integer
             generator:
                 strategy:   AUTO
+    gedmo:
+        soft_deleteable:
+            field_name: deletedAt
     fields:
         name:
             type:     string
@@ -31,6 +34,9 @@ Core\AttributeBundle\Entity\Type:
             length:   255
         formOptions:
             type:     json_array
+        deletedAt:
+            type: datetime
+            nullable: true
     manyToOne:
         parent:
             fieldName:      parent

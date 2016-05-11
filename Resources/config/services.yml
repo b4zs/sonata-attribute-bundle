@@ -75,6 +75,8 @@ services:
     ### Twig Extensions ###
     core_attribute.twig.extension.attribute:
         class: Core\AttributeBundle\Twig\Extension\AttributeExtension
+        arguments:
+            - @core_attribute.form_type_options_provider.provider_chain
         tags:
             - { name: twig.extension }
 

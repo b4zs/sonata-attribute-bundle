@@ -103,9 +103,26 @@ class SendDynamicFormEmailAction extends SendEmailAction
         $formBuilder->add('from_name', 'text', array());
         $formBuilder->add('to', 'text');
         $formBuilder->add('subject', 'text', array());
-        $formBuilder->add('body', 'textarea', array(
-            'attr' => array(
-                'rows' => 7,
+        $formBuilder->add('body', 'ckeditor', array(
+            'config' => array(
+                'toolbar' => array(
+                    array(
+                        'name' => 'clipboard',
+                        'items' => array('Undo', 'Redo'),
+                    ),
+                    array(
+                        'name' => 'links',
+                        'items' => array('Link', 'Unlink'),
+                    ),
+                    array(
+                        'name' => 'basicstyles',
+                        'items' => array('Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat'),
+                    ),
+                    array(
+                        'name' => 'paragraph',
+                        'items' => array('NumberedList', 'BulletedList'),
+                    ),
+                ),
             ),
             'sonata_help' => $bodySonataHelp,
         ));

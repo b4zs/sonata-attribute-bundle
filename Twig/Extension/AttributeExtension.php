@@ -5,9 +5,17 @@ namespace Core\AttributeBundle\Twig\Extension;
 use Core\AttributeBundle\Entity\Attribute;
 use Core\AttributeBundle\Entity\CollectionAttribute;
 use Core\AttributeBundle\Entity\Type;
+use Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain;
 
 class AttributeExtension extends \Twig_Extension
 {
+    /** @var ProviderChain */
+    private $optionsProviderChain;
+
+    public function __construct(ProviderChain $optionsProviderChain)
+    {
+        $this->optionsProviderChain = $optionsProviderChain;
+    }
 
     public function getFilters()
     {
@@ -16,14 +24,15 @@ class AttributeExtension extends \Twig_Extension
         );
     }
 
-    public function flattenCollectionAttribute($collection)
+    public function flattenCollectionAttribute($collection, $linkManagedObjects = true)
     {
 
         if(!$collection instanceof CollectionAttribute){
-            throw new \InvalidArgumentException(sprintf('Input must be an instance of "%s"', 'Core\AttributeBundle\Entity\Colelction'));
+            throw new \InvalidArgumentException(sprintf('Input must be an instance of "%s"', 'Core\AttributeBundle\Entity\CollectionAttribute'));
         }
 
-        return $this->collectionAttributeToArray($collection);
+        $collectionAttributeValues = $this->collectionAttributeToArray($collection);
+        return $collectionAttributeValues;
     }
 
     private function collectionAttributeToArray(CollectionAttribute $collection, &$out = array()){
@@ -35,9 +44,12 @@ class AttributeExtension extends \Twig_Extension
             }else{
                 if(is_scalar($collectionValue->getValue()) || is_callable(array($collectionValue->getValue(), '__toString'))){
                     $path = $this->getPath($collectionValue);
+                    $provider = $this->optionsProviderChain->getProvider($collectionValue->getType()->getFormType());
+
                     $out[$path] = array(
                         'label' => $collectionValue->getType()->getLabel()?:$collectionValue->getType()->getName(),
-                        'value' => (string)$collectionValue->getValue()
+                        'value' => $collectionValue->getValue(),
+                        'template' => $provider->getShowTemplate(),
                     );
                 }
             }

@@ -53,5 +53,9 @@ abstract class AbstractProvider implements ProviderInterface{
         return array_merge($options, array('constraints' => $this->buildConstraintsArray($options)));
     }
 
+    public function getShowTemplate()
+    {
+        return 'CoreAttributeBundle:FormTypeShowValue:string.html.twig';
+    }
 
 }

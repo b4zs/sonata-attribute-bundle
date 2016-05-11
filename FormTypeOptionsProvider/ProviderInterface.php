@@ -27,4 +27,9 @@ interface ProviderInterface{
      */
     public function appendConstraints($options);
 
+    /**
+     * @return string
+     */
+    public function getShowTemplate();
+
 }
