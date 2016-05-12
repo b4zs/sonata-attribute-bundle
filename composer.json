@@ -14,7 +14,6 @@
   ],
   "require": {
     "sonata/tools-bundle": "1.0.*",
-    "octet/reference-object": "master@dev",
     "symfony/form": "~2.7",
     "symfony/validator": "~2.7",
     "sonata-project/media-bundle": "~2.3",

@@ -233,6 +233,9 @@ class TypeAdmin extends Admin
     {
         /** @var QueryBuilder $query */
         $query = parent::createQuery($context);
+
+        $query->getEntityManager()->getConnection()->exec('SET SQL_MODE=0;');
+
         $query->orderBy('o.position');
 
         if (null === $this->getPersistentParameter('parent')) {

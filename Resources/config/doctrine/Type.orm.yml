@@ -1,6 +1,7 @@
 Core\AttributeBundle\Entity\Type:
     type: entity
     table: attribute_type
+    repositoryClass: Core\AttributeBundle\Repository\TypeRepository
     id:
         id:
             type: integer

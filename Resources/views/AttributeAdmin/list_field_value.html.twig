@@ -1,0 +1,22 @@
+{% extends admin.getTemplate('base_list_field') %}
+{% import _self as collection_value_helper %}
+
+
+{% macro render(array_value) %}
+    <dl class="dl-horizontal">
+        {% for attribute in array_value %}
+            <dt>{{ attribute.label }}</dt>
+            <dd>{% include attribute.template with {'value': attribute.value} %}</dd>
+        {% endfor %}
+    </dl>
+{% endmacro %}
+
+{% block field %}
+    <div style="max-width:400px">
+            {% if object.type.formType == 'form' %}
+                {{ collection_value_helper.render(object|flatten_collection_attribute) }}
+            {% else %}
+                {{ object.value }}
+            {% endif %}
+    </div>
+{% endblock %}

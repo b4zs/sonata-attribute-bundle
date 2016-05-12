@@ -1,1 +1,15 @@
 {% extends '@SonataAdmin/CRUD/base_edit.html.twig' %}
+
+{% block actions %}
+    {{ parent() }}
+    {% if admin.id(object) and admin.isGranted('EDIT', object) %}
+        {% set persistentParameters = admin.getPersistentParameters() %}
+        {% set routeParams = persistentParameters|merge({ parent: object.id }) %}
+        <li>
+            <a class="sonata-action-element" href="{{ admin.generateUrl('list', routeParams) }}">
+                <i class="glyphicon glyphicon-tasks"></i>
+                {{ 'action_fields'|trans }}
+            </a>
+        </li>
+    {% endif %}
+{% endblock %}

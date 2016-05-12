@@ -1,0 +1,6 @@
+{% extends admin.getTemplate('base_list_field') %}
+{% import _self as collection_value_helper %}
+
+{% block field %}
+    <a href="{{ admin.getTypeAdmin().generateObjectUrl('edit', value) }}">{{ value.label }}</a>
+{% endblock %}

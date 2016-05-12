@@ -5,8 +5,11 @@ namespace Core\AttributeBundle\Admin;
 use Core\AttributeBundle\Entity\FormSubmission;
 use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\Form\DynamicFormType;
+use Core\AttributeBundle\Repository\TypeRepository;
 use Core\AttributeBundle\Utils\TypeHelper;
 use Doctrine\Common\Util\Debug;
+use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -14,38 +17,17 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class FormSubmissionAdmin extends Admin
+class FormSubmissionAdmin extends AbstractAttributeAdmin
 {
-
     protected $parentAssociationMapping = 'type';
 
-    /** @var Container */
-    private $container;
-
-    /**
-     * @param Container $container
-     */
-    public function setContainer($container)
-    {
-        $this->container = $container;
-    }
-
-    protected function configureRoutes(RouteCollection $collection)
-    {
-        $collection->remove('create');
-    }
-
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $this->addTypeFilter($datagridMapper);
     }
 
-    /**
-     * @param $object
-     */
     public function preUpdate($object)
     {
         /** @var FormSubmission $object */
@@ -53,15 +35,15 @@ class FormSubmissionAdmin extends Admin
         parent::preUpdate($object);
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $this->disableFilterForEntity('soft_deleteable','Core\AttributeBundle\Entity\Type');
 
         $listMapper
-            ->add('collection.type.label')
+            ->addIdentifier('id')
+            ->addIdentifier('type', null, array(
+                'template' => 'CoreAttributeBundle:AttributeAdmin:list_field_type.html.twig',
+            ))
             ->add('collection', null, array(
                 'template' => 'CoreAttributeBundle:FormSubmissionAdmin:list_collection_value_field.html.twig',
                 'label' => 'label.form_data',
@@ -77,24 +59,20 @@ class FormSubmissionAdmin extends Admin
         ;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $this->disableFilterForEntity('soft_deleteable','Core\AttributeBundle\Entity\Type');
         $collectionFormType = $this->createFormType();
 
-        $formMapper->add('collection', $collectionFormType, array(
-            'data' => $this->getSubject()->getCollection(),
-            'label' => false,
-        ));
-
+        $formMapper->with('Submission');
+            $formMapper->add('collection', $collectionFormType, array(
+                'data' => $this->getSubject()->getCollection(),
+                'label' => false,
+            ));
+        $this->addHiddenTypeField($formMapper);
+        $formMapper->end();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureShowFields(ShowMapper $filter)
     {
         $this->disableFilterForEntity('soft_deleteable','Core\AttributeBundle\Entity\Type');
@@ -106,10 +84,6 @@ class FormSubmissionAdmin extends Admin
             ));
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
     public function toString($object)
     {
         if($object instanceof FormSubmission && $object->getId()){
@@ -123,13 +97,6 @@ class FormSubmissionAdmin extends Admin
     {
         $query = parent::createQuery($context);
         return $query;
-    }
-
-    private function createFormType()
-    {
-        $rootType = $this->getSubject()->getType();
-        $rootType = new DynamicFormType($this->container->get('core_attribute.form_type_options_provider.provider_chain'),$rootType);
-        return $rootType;
     }
 
     public function getTemplate($name)
@@ -154,11 +121,10 @@ class FormSubmissionAdmin extends Admin
         return array_merge(array('id', 'createdAt'),$paths);
     }
 
-    protected function disableFilterForEntity($filterName, $entity)
+    public function getNewInstance()
     {
-        /** @var \Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter $filter */
-        $filter = $this->getConfigurationPool()->getContainer()->get('doctrine.orm.entity_manager')->getFilters()->getFilter($filterName);
-        $filter->disableForEntity($entity);
+        $object = parent::getNewInstance();
+        $this->initializeTypeFieldFromRequest($object);
+        return $object;
     }
-
 }
