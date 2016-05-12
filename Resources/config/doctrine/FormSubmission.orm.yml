@@ -28,6 +28,10 @@ Core\AttributeBundle\Entity\FormSubmission:
             targetEntity: Core\AttributeBundle\Entity\CollectionAttribute
             cascade: ["all"]
             orphanRemoval: true
+        objectIdentity:
+            targetEntity: Core\ObjectIdentityBundle\Model\ObjectIdentityInterface
+            inversedBy: formSubmission
+            cascade: ["persist"]
     manyToOne:
         type:
             targetEntity: Core\AttributeBundle\Entity\Type

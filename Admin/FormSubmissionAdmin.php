@@ -115,7 +115,9 @@ class FormSubmissionAdmin extends AbstractAttributeAdmin
         $paths = TypeHelper::flattenType($type);
 
         $paths = array_map(function($n){
-            return str_replace(current(explode('.', $n)), 'collection', $n).'.value';
+            $parts = explode('.', $n);
+            $parts[0] = 'collection';
+            return implode('.', $parts);
         },$paths);
 
         return array_merge(array('id', 'createdAt'),$paths);
