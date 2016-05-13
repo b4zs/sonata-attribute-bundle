@@ -19,7 +19,8 @@
     "sonata-project/media-bundle": "~2.3",
     "symfony/twig-bundle": "~2.7",
     "doctrine/orm": "2.5.*@dev",
-    "doctrine/doctrine-bundle": "~1.2"
+    "doctrine/doctrine-bundle": "~1.2",
+    "burgov/key-value-form-bundle": "@stable"
   },
   "require-dev": {
     "phpunit/phpunit": "*",
