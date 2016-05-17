@@ -1,0 +1,3 @@
+Core\AttributeBundle\Entity\Type:
+    constraints:
+        - Core\AttributeBundle\Validator\Constraints\TypeClass: ~
