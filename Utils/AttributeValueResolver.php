@@ -13,9 +13,9 @@ class AttributeValueResolver
     /** @var  PropertyAccessor */
     private $propertyAccessor;
 
-    public function __construct(PropertyAccessor $propertyAccessor)
+    public function __construct()
     {
-        $this->propertyAccessor = $propertyAccessor;
+        $this->propertyAccessor = new PropertyAccessor(true);
     }
 
     /**

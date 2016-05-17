@@ -195,4 +195,3 @@ services:
     ### Utils ###
     core_attribute.utils.attribute_value_resolver:
         class: Core\AttributeBundle\Utils\AttributeValueResolver
-        arguments: [ @property_accessor ]
