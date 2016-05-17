@@ -2,5 +2,7 @@
 {% import _self as collection_value_helper %}
 
 {% block field %}
+    {% if value is not null %}
     <a href="{{ admin.getTypeAdmin().generateObjectUrl('edit', value) }}">{{ value.label }}</a>
+    {% endif %}
 {% endblock %}
