@@ -81,6 +81,7 @@ services:
         class: Core\AttributeBundle\Twig\Extension\AttributeExtension
         arguments:
             - @core_attribute.form_type_options_provider.provider_chain
+            - @core_attribute.utils.attribute_value_resolver
         tags:
             - { name: twig.extension }
 
@@ -190,3 +191,8 @@ services:
         class: Core\AttributeBundle\ModelBuilder\FormSubmissionIndexBuilder
         tags:
             - { name: model_builder, class: 'Core\AttributeBundle\Entity\FormSubmission' }
+
+    ### Utils ###
+    core_attribute.utils.attribute_value_resolver:
+        class: Core\AttributeBundle\Utils\AttributeValueResolver
+        arguments: [ @property_accessor ]

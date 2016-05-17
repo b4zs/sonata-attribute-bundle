@@ -6,21 +6,27 @@ use Core\AttributeBundle\Entity\Attribute;
 use Core\AttributeBundle\Entity\CollectionAttribute;
 use Core\AttributeBundle\Entity\Type;
 use Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain;
+use Core\AttributeBundle\Utils\AttributeValueResolver;
 
 class AttributeExtension extends \Twig_Extension
 {
     /** @var ProviderChain */
     private $optionsProviderChain;
 
-    public function __construct(ProviderChain $optionsProviderChain)
+    /** @var AttributeValueResolver */
+    private $attributeValueResolver;
+
+    public function __construct(ProviderChain $optionsProviderChain, AttributeValueResolver $attributeValueResolver)
     {
         $this->optionsProviderChain = $optionsProviderChain;
+        $this->attributeValueResolver = $attributeValueResolver;
     }
 
     public function getFilters()
     {
         return array(
             new \Twig_SimpleFilter('flatten_collection_attribute', array($this, 'flattenCollectionAttribute')),
+            new \Twig_SimpleFilter('get_attribute_value', array($this, 'getAttributeValue')),
         );
     }
 
@@ -56,6 +62,11 @@ class AttributeExtension extends \Twig_Extension
         }
 
         return $out;
+    }
+
+    public function getAttributeValue($object, $attributePath, $property = 'attributes')
+    {
+        return $this->attributeValueResolver->getValue($object, $attributePath, $property);
     }
 
     public function getName()
