@@ -1,0 +1,6 @@
+Core\AttributeBundle\Entity\Attribute:
+  properties:
+    type:
+      exclude: true
+    parent:
+      exclude: true
