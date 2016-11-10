@@ -25,6 +25,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class MediaAdminSelectorType extends AbstractType
@@ -43,13 +44,13 @@ class MediaAdminSelectorType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->resetModelTransformers();
+//        $builder->resetModelTransformers();
 
         $field = $this->adminFormHelper->createField(
             $this->adminFormHelper->createFormNewMapper($builder),
             'value',
             'sonata_type_model_list',
-            array('class' => $this->mediaAdmin->getClass()),
+            array('class' => $this->mediaAdmin->getClass(), 'label' => false,),
             array('class' => $this->mediaAdmin->getClass()),
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE,
             false
@@ -71,4 +72,19 @@ class MediaAdminSelectorType extends AbstractType
     {
         return $this->container->get('sonata.admin.form.helper');
     }
+
+    /**
+     * Configures the options for this type.
+     *
+     * @param OptionsResolver $resolver The resolver for the options.
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class'        => 'Core\AttributeBundle\Entity\MediaAttribute',
+            'attribute_type'    => null,
+        ));
+    }
+
+
 }

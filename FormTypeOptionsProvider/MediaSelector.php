@@ -23,6 +23,7 @@ class MediaSelector extends AbstractProvider
     public function appendConstraints($options)
     {
         $options['omit_attribute_transformer'] = true;
+        $options['class'] = 'Core\AttributeBundle\Entity\MediaAttribute';
         $options['data_class'] = 'Core\AttributeBundle\Entity\MediaAttribute';
 
         return $options;

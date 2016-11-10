@@ -3,6 +3,7 @@
 namespace Core\AttributeBundle\Form;
 
 use Core\AttributeBundle\Entity\Type;
+use Core\AttributeBundle\Form\DataTransformer\AttributeInitializerTransformer;
 use Core\AttributeBundle\Form\DataTransformer\AttributeToValueTransformer;
 use Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain;
 use Symfony\Component\Form\AbstractType;
@@ -52,7 +53,9 @@ class DynamicFormType extends AbstractType
             $attributeToValueTransformer->setType($this->type);
             $builder->addModelTransformer($attributeToValueTransformer);
         } else {
-            $builder;
+            $attributeInitializerTransformer = new AttributeInitializerTransformer();
+            $attributeInitializerTransformer->setType($this->type);
+            $builder->addModelTransformer($attributeInitializerTransformer);
         }
 	}
 

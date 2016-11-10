@@ -9,7 +9,12 @@ class MediaAttribute extends Attribute
 	/** @var MediaInterface */
 	protected $mediaValue;
 
-	/**
+    public function __construct()
+    {
+    }
+
+
+    /**
 	 * @return MediaInterface
 	 */
 	public function getValue()
