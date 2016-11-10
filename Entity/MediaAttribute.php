@@ -33,4 +33,14 @@ class MediaAttribute extends Attribute
 		}
 	}
 
+    public function getMediaValue()
+    {
+        return $this->mediaValue;
+    }
+
+    public function setMediaValue($mediaValue)
+    {
+        $this->mediaValue = $mediaValue;
+    }
+
 }

@@ -5,6 +5,10 @@ namespace Core\AttributeBundle\FormTypeOptionsProvider;
 interface ProviderInterface{
 
     /**
+     * !!validation needed!!
+     * it supposably provides the options that are editable on via the forms when
+     * configuring the type (administration interface)
+     *
      * @return array
      */
     public function getOptions();
@@ -22,6 +26,8 @@ interface ProviderInterface{
     public function hasOption($option);
 
     /**
+     * Forces options to be set during formType configuration
+     *
      * @param array
      * @return array
      */

@@ -7,6 +7,7 @@ use Core\AttributeBundle\Form\DataTransformer\AttributeToValueTransformer;
 use Core\AttributeBundle\FormTypeOptionsProvider\ProviderChain;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -46,9 +47,13 @@ class DynamicFormType extends AbstractType
 			));
 		}
 
-		$attributeToValueTransformer = new AttributeToValueTransformer();
-		$attributeToValueTransformer->setType($this->type);
-		$builder->addModelTransformer($attributeToValueTransformer);
+		if (empty($options['omit_attribute_transformer'])) {
+            $attributeToValueTransformer = new AttributeToValueTransformer();
+            $attributeToValueTransformer->setType($this->type);
+            $builder->addModelTransformer($attributeToValueTransformer);
+        } else {
+            $builder;
+        }
 	}
 
 	/**
