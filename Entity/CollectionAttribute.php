@@ -60,11 +60,8 @@ class CollectionAttribute extends Attribute
 				}
 			}
 
-
-
 			$value->setParent($this);
 			$this->getValue()->add($value);
-
 		} else {
 			throw new \InvalidArgumentException('Argument 2. must be an instance of Attribute');
 		}
@@ -79,18 +76,22 @@ class CollectionAttribute extends Attribute
 
 	public function serialize()
 	{
-		$result = array();
-		foreach ($this->getValue() as $child) {
-			$name = $child->getType() ? $child->getType()->getName() : null;
-			$value = $child->serialize();
-			if ($name) {
-				$result[$name] = $value;
-			} else {
-				$result[] = $value;
-			}
-		}
 
-		return $result;
+        if (!$this->getValue() instanceof Collection) {
+            return null;
+        } else {
+            $result = array();
+            foreach ($this->getValue() as $child) {
+                $name = $child->getType() ? $child->getType()->getName() : null;
+                $value = $child->serialize();
+                if ($name) {
+                    $result[$name] = $value;
+                } else {
+                    $result[] = $value;
+                }
+            }
+            return $result;
+        }
 	}
 
 }
