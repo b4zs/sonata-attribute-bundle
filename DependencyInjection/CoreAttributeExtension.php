@@ -28,9 +28,11 @@ class CoreAttributeExtension extends Extension
 
         if ($container->hasParameter('sonata.media.admin.media.entity')) {
             $mediaClass = $container->getParameter('sonata.media.admin.media.entity');
+            $galleryClass = $container->getParameter('sonata.media.admin.gallery.entity');
 
             $this->registerDoctrineMapping(array(
-                'media_class' => $mediaClass,
+                'media_class'   => $mediaClass,
+                'gallery_class' => $galleryClass,
             ));
 
         }
@@ -47,6 +49,18 @@ class CoreAttributeExtension extends Extension
             'joinColumns'    => array(
                 array(
                     'name'     => 'media_value',
+                    'onDelete' => 'SET NULL',
+                ),
+            ),
+        ));
+
+        $collector->addAssociation('Core\AttributeBundle\Entity\GalleryAttribute', 'mapManyToOne', array(
+            'fieldName'     => 'galleryValue',
+            'targetEntity'  => $config['gallery_class'],
+            'cascade'       => array('persist', 'refresh', 'merge'),
+            'joinColumns'    => array(
+                array(
+                    'name'     => 'gallery_value',
                     'onDelete' => 'SET NULL',
                 ),
             ),

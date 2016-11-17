@@ -204,6 +204,12 @@ services:
         tags:
             - { name: dynamic_form.options_provider, alias: core_attribute_media_admin_selector_type }
 
+    core_attribute.form_type_options_provider.gallery_selector:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\GallerySelector
+        publc: false
+        tags:
+            - { name: dynamic_form.options_provider, alias: core_attribute_gallery_admin_selector_type }
+
     core.media.form.type.admin_selector:
         class: Core\AttributeBundle\Form\MediaAdminSelectorType
         arguments:
@@ -211,6 +217,14 @@ services:
             - '@sonata.admin.form.helper'
         tags:
             - { name: form.type, alias: core_attribute_media_admin_selector_type }
+
+    core.media.form.type.gallery_admin_selector:
+        class: Core\AttributeBundle\Form\GalleryAdminSelectorType
+        arguments:
+            - '@sonata.media.admin.gallery'
+            - '@sonata.admin.form.helper'
+        tags:
+            - { name: form.type, alias: core_attribute_gallery_admin_selector_type }
 
     ### Model Builder ###
     core_attribute.model_builder.form_submission_index:

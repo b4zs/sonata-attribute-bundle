@@ -5,23 +5,22 @@ namespace Core\AttributeBundle\Form;
 
 
 use Core\AdminBundle\Form\AdminFormHelper;
-use Core\AttributeBundle\Entity\MediaAttribute;
-use Sonata\MediaBundle\Admin\BaseMediaAdmin;
+use Sonata\MediaBundle\Admin\GalleryAdmin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MediaAdminSelectorType extends AbstractType
+class GalleryAdminSelectorType extends AbstractType
 {
-    /** @var BaseMediaAdmin */
-    private $mediaAdmin;
+    /** @var GalleryAdmin */
+    private $galleryAdmin;
 
     /** @var AdminFormHelper */
     private $adminFormHelper;
 
-    public function __construct(BaseMediaAdmin $mediaAdmin, AdminFormHelper $adminFormHelper)
+    public function __construct(GalleryAdmin $mediaAdmin, AdminFormHelper $adminFormHelper)
     {
-        $this->mediaAdmin = $mediaAdmin;
+        $this->galleryAdmin = $mediaAdmin;
         $this->adminFormHelper = $adminFormHelper;
     }
 
@@ -31,8 +30,8 @@ class MediaAdminSelectorType extends AbstractType
             $this->adminFormHelper->createFormNewMapper($builder),
             'value',
             'sonata_type_model_list',
-            array('class' => $this->mediaAdmin->getClass(), 'label' => false,),
-            array('class' => $this->mediaAdmin->getClass()),
+            array('class' => $this->galleryAdmin->getClass(), 'label' => false,),
+            array('class' => $this->galleryAdmin->getClass()),
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE,
             false
         );
@@ -46,7 +45,7 @@ class MediaAdminSelectorType extends AbstractType
 
     public function getName()
     {
-        return 'core_attribute_media_admin_selector_type';
+        return 'core_attribute_gallery_admin_selector_type';
     }
 
     private function getAdminFormHelper()
@@ -62,7 +61,7 @@ class MediaAdminSelectorType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class'        => 'Core\AttributeBundle\Entity\MediaAttribute',
+            'data_class'        => 'Core\AttributeBundle\Entity\GalleryAttribute',
             'attribute_type'    => null,
         ));
     }
