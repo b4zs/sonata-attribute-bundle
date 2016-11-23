@@ -4,5 +4,5 @@ Core\AttributeBundle\Entity\StringAttribute:
         stringValue:
             column: string_value
             type: string
-            length: 255
+            length: 2048
             nullable: true

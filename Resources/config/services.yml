@@ -213,7 +213,7 @@ services:
     core.media.form.type.admin_selector:
         class: Core\AttributeBundle\Form\MediaAdminSelectorType
         arguments:
-            - '@sonata.media.admin.media'
+            - '@sonata.media.admin.media='
             - '@sonata.admin.form.helper'
         tags:
             - { name: form.type, alias: core_attribute_media_admin_selector_type }
@@ -221,7 +221,7 @@ services:
     core.media.form.type.gallery_admin_selector:
         class: Core\AttributeBundle\Form\GalleryAdminSelectorType
         arguments:
-            - '@sonata.media.admin.gallery'
+            - '@sonata.media.admin.gallery='
             - '@sonata.admin.form.helper'
         tags:
             - { name: form.type, alias: core_attribute_gallery_admin_selector_type }
