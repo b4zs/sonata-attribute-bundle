@@ -76,10 +76,12 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 				$formData = $form->getData();
 				$submission = $this->createSubmission($attributeType, $formData);
 
-				$this->getDispatcher()->dispatch('dynamic_form_submission.'.$attributeType->getName(), new FormSubmissionEvent($submission));
-
 				$entityManager->persist($submission);
 				$entityManager->flush($submission);
+
+				$this->getDispatcher()->dispatch('dynamic_form_submission.'.$attributeType->getName(), new FormSubmissionEvent($submission));
+
+				$entityManager->flush();
 
 				$messages[] = array(
 					'type'      => 'success',
