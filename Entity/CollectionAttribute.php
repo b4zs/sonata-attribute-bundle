@@ -17,6 +17,10 @@ class CollectionAttribute extends Attribute
 		$this->collectionValue = new ArrayCollection();
 	}
 
+	function __toString()
+	{
+		return get_class($this->getValue());
+	}
 
 	public function getValue()
 	{

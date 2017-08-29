@@ -9,6 +9,15 @@ class DateTimeAttribute extends Attribute
 	/** @var \DateTime */
 	protected $dateTimeValue;
 
+	function __toString()
+	{
+		if($this->getValue() instanceof \DateTime){
+			return $this->getValue()->format('r');
+		}
+
+		return '';
+	}
+
 	/**
 	 * @return \DateTime
 	 */

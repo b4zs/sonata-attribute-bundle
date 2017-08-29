@@ -1,0 +1,15 @@
+{% form_theme form 'CoreAttributeBundle:Form:fields.html.twig' %}
+{% extends '@SonataAdmin/CRUD/show.html.twig' %}
+
+{% block show %}
+    <div class="sonata-ba-view">
+    <h2>Please select</h2>
+        <ul>
+            {% for type in types %}
+            <li>
+                <a href="{{ admin.generateUrl('create', { type_id: type.id }) }}">{{ type.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock  %}

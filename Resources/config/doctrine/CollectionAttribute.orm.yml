@@ -6,3 +6,4 @@ Core\AttributeBundle\Entity\CollectionAttribute:
             mappedBy: parent
             cascade:  [persist, remove]
             orphanRemoval: true
+            fetch:    LAZY

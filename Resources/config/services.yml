@@ -9,15 +9,19 @@ services:
             - [addChild, ['@core_attribute.admin.form_submission']]
             - [setFormTheme, [ ['CoreAttributeBundle:TypeAdmin:form_admin_fields.html.twig'] ]]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Form, label: Types}
+            - {name: sonata.admin, manager_type: orm, group: 'Dynamic Data', label: 'Forms / Structures' }
 
     core_attribute.admin.form_submission:
         class: Core\AttributeBundle\Admin\FormSubmissionAdmin
-        arguments: [~, Core\AttributeBundle\Entity\FormSubmission, CoreAttributeBundle:FormSubmissionAdmin]
-        calls:
-            - [setContainer, ['@service_container']]
+        arguments: [~, Core\AttributeBundle\Entity\FormSubmission, CoreAttributeBundle:AttributeAdmin]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Form, label: Results, show_in_dashboard: false}
+            - {name: sonata.admin, manager_type: orm, group: 'Dynamic Data', label: 'Form Submissions' }
+
+    core_attribute.admin.records:
+        class: Core\AttributeBundle\Admin\AttributeAdmin
+        arguments: [~, Core\AttributeBundle\Entity\Attribute, CoreAttributeBundle:AttributeAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: 'Dynamic Data', label: 'Records' }
 
     core_attribute.block.service.form:
         class: Core\AttributeBundle\Block\Service\FormBlockService
@@ -42,12 +46,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: core_attribute.option_resolve, method: resolve  }
             - { name: kernel.event_listener, event: core_attribute.option_resolve_attr, method: resolveAttr  }
-
-    core_attribute.event_listener.type_name_generator:
-        class: Core\AttributeBundle\EventListener\TypeNameGeneratorEventListener
-        tags:
-            - { name: doctrine.event_listener, event: prePersist }
-            - { name: doctrine.event_listener, event: preUpdate }
 
     ### Event Action ###
     core_attribute.event_action.send_dynamic_form_email:
@@ -77,6 +75,7 @@ services:
         class: Core\AttributeBundle\Twig\Extension\AttributeExtension
         arguments:
             - @core_attribute.form_type_options_provider.provider_chain
+            - @core_attribute.utils.attribute_value_resolver
         tags:
             - { name: twig.extension }
 
@@ -180,3 +179,21 @@ services:
             - %sonata.media.admin.media.entity%
         tags:
             - { name: dynamic_form.options_provider, alias: core_media_file_input }
+
+    ### Model Builder ###
+    core_attribute.model_builder.form_submission_index:
+        class: Core\AttributeBundle\ModelBuilder\FormSubmissionIndexBuilder
+        tags:
+            - { name: model_builder, class: 'Core\AttributeBundle\Entity\FormSubmission' }
+
+    ### Utils ###
+    core_attribute.utils.attribute_value_resolver:
+        class: Core\AttributeBundle\Utils\AttributeValueResolver
+
+    ### Validation ###
+    core_attribute.validator.constraints.type_class:
+        class: Core\AttributeBundle\Validator\Constraints\TypeClassValidator
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: validator.constraint_validator, alias: core_attribute.validator.constraints.type_class }

@@ -1,11 +1,14 @@
 <?php
 
 namespace Core\AttributeBundle\Entity;
+use Application\ObjectIdentityBundle\Entity\ObjectIdentity;
+use Core\ObjectIdentityBundle\Model\ObjectIdentityAware;
+use Core\ObjectIdentityBundle\Model\ObjectIdentityInterface;
 
 /**
  * FormSubmission
  */
-class FormSubmission
+class FormSubmission implements ObjectIdentityAware
 {
     /**
      * @var integer
@@ -37,6 +40,16 @@ class FormSubmission
      */
     private $type;
 
+    /**
+     * @var ObjectIdentityInterface
+     */
+    private $objectIdentity;
+
+    public function __construct()
+    {
+        //Application\ObjectIdentityBundle\Entity\ObjectIdentity :(
+        $this->objectIdentity = new ObjectIdentity($this);
+    }
 
     /**
      * Get id
@@ -167,5 +180,22 @@ class FormSubmission
     {
         return $this->type;
     }
+
+    public function getCanonicalName()
+    {
+        return '#'.$this->getId();
+    }
+
+    public function getObjectIdentity()
+    {
+        return $this->objectIdentity;
+    }
+
+    public function setObjectIdentity(ObjectIdentityInterface $objectIdentity)
+    {
+        $this->objectIdentity = $objectIdentity;
+    }
+
+
 }
 

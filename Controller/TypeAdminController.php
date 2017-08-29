@@ -25,17 +25,14 @@ class TypeAdminController extends CRUDController
 			$presetNames = array_keys($optionsProviderChain->getProviders());
 
 			if(null === $parent){
-				$presetNames = array_intersect(
-					array('form'),
-					$presetNames
-				);
+				return $this->redirect($admin->generateUrl('create', array('preset' => 'form')));
+			} else {
+				return $this->render('CoreAttributeBundle:TypeAdmin:create_preset_selector.html.twig', array(
+					'presets' => array_combine($presetNames, $presetNames),
+					'action' => 'create',
+					'object' => $admin->getNewInstance(),
+				));
 			}
-
-			return $this->render('CoreAttributeBundle:TypeAdmin:create_preset_selector.html.twig', array(
-				'presets' => array_combine($presetNames, $presetNames),
-				'action' => 'create',
-				'object' => $admin->getNewInstance(),
-			));
 		} else {
 			return parent::createAction();
 		}

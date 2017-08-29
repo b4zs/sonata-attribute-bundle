@@ -21,7 +21,7 @@ class TypeHelper
             while ($current = $current->getParent()) {
                 $a[] = $current->getName();
             }
-            $out[$type->getLabel().'_'.$type->getId()] = implode('.',array_reverse($a));
+            $out[$type->getParent()->getLabel() .' - '. $type->getLabel()] = implode('.',array_reverse($a));
         }
 
         return $out;

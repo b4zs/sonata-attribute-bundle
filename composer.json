@@ -13,17 +13,19 @@
     }
   ],
   "require": {
-    "sonata/tools-bundle": "dev-master",
-    "octet/reference-object": "master@dev",
+    "sonata/tools-bundle": "1.*||master@dev",
     "symfony/form": "~2.7",
     "symfony/validator": "~2.7",
-    "sonata-project/media-bundle": "~2.3",
+    "sonata-project/media-bundle": ">=2.3@dev",
     "symfony/twig-bundle": "~2.7",
-    "doctrine/orm": "2.5.*@dev",
-    "doctrine/doctrine-bundle": "~1.2"
+    "burgov/key-value-form-bundle": "@stable"
   },
   "require-dev": {
     "phpunit/phpunit": "*",
     "symfony/finder": "~2.8"
+  },
+  "suggest": {
+    "doctrine/orm": ">2.5.1 for persistence",
+    "doctrine/doctrine-bundle": "*"
   }
 }

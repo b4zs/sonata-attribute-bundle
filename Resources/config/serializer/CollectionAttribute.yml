@@ -1,0 +1,4 @@
+Core\AttributeBundle\Entity\CollectionAttribute:
+  properties:
+    children:
+      exclude: true
