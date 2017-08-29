@@ -56,6 +56,7 @@ class AttributeExtension extends \Twig_Extension
                         'label' => $collectionValue->getType()->getLabel()?:$collectionValue->getType()->getName(),
                         'value' => $collectionValue->getValue(),
                         'template' => $provider->getShowTemplate(),
+                        'id' => $collectionValue->getType()->getId(),
                     );
                 }
             }
