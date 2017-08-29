@@ -41,7 +41,7 @@ class AttributeExtension extends \Twig_Extension
         return $collectionAttributeValues;
     }
 
-    private function collectionAttributeToArray(CollectionAttribute $collection, &$out = array()){
+    public function collectionAttributeToArray(CollectionAttribute $collection, &$out = array()){
 
         /** @var Attribute $collectionValue */
         foreach($collection->getValue() as $collectionValue){
