@@ -13,6 +13,7 @@ class CoreAttributeBundle extends Bundle
     {
         parent::build($container);
         $container->addCompilerPass(new OptionsProviderCompilerPass());
+
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace Core\AttributeBundle\DependencyInjection;
 
+use Core\AttributeBundle\Entity\CategoryAttribute;
 use Sonata\EasyExtendsBundle\Mapper\DoctrineCollector;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -29,10 +30,12 @@ class CoreAttributeExtension extends Extension
         if ($container->hasParameter('sonata.media.admin.media.entity')) {
             $mediaClass = $container->getParameter('sonata.media.admin.media.entity');
             $galleryClass = $container->getParameter('sonata.media.admin.gallery.entity');
+            $categoryClass = $container->getParameter('sonata.classification.admin.category.entity');
 
             $this->registerDoctrineMapping(array(
                 'media_class'   => $mediaClass,
                 'gallery_class' => $galleryClass,
+                'category_class' => $categoryClass
             ));
 
         }
@@ -50,6 +53,18 @@ class CoreAttributeExtension extends Extension
                 array(
                     'name'     => 'media_value',
                     'onDelete' => 'SET NULL',
+                ),
+            ),
+        ));
+        
+        $collector->addAssociation(CategoryAttribute::class, 'mapManyToOne', array(
+            'fieldName'     => 'categoryValue',
+            'targetEntity'  => $config['category_class'],
+            'cascade'       => array('persist', 'refresh', 'merge'),
+            'joinColumns'   => array(
+                array(
+                    'name'      => 'media_value',
+                    'onDelete'  => 'setNull'
                 ),
             ),
         ));

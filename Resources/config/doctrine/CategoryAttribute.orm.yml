@@ -1,0 +1,2 @@
+Core\AttributeBundle\Entity\CategoryAttribute:
+    type: entity

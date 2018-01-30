@@ -1,6 +1,7 @@
 <?php
 
 namespace Core\AttributeBundle\FormTypeOptionsProvider;
+use Core\ClassificationBundle\Entity\Category;
 
 /**
  * NOTICE:
@@ -15,6 +16,7 @@ class GallerySelector extends AbstractProvider
         return array_merge($defaultOptions, array(
             'attribute_class' => 'Core\AttributeBundle\Entity\GalleryAttribute',
             'data_class' => 'Core\AttributeBundle\Entity\GalleryAttribute',
+            'class' => Category::class
         ));
     }
 
