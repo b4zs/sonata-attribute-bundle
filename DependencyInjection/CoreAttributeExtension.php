@@ -21,6 +21,10 @@ class CoreAttributeExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $categoryClass = null;
+        $mediaClass = null;
+        $galleryClass = null;
+
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
