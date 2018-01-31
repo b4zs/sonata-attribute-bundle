@@ -30,14 +30,19 @@ class CoreAttributeExtension extends Extension
         if ($container->hasParameter('sonata.media.admin.media.entity')) {
             $mediaClass = $container->getParameter('sonata.media.admin.media.entity');
             $galleryClass = $container->getParameter('sonata.media.admin.gallery.entity');
-            $categoryClass = $container->getParameter('sonata.classification.admin.category.entity');
 
             $this->registerDoctrineMapping(array(
                 'media_class'   => $mediaClass,
                 'gallery_class' => $galleryClass,
-                'category_class' => $categoryClass
             ));
 
+        }
+
+        if ($container->hasParameter('sonata.classification.admin.category.entity')) {
+            $categoryClass = $container->getParameter('sonata.classification.admin.category.entity');
+            $this->registerDoctrineMapping(array(
+                'category_class' => $categoryClass
+            ));
         }
     }
 
