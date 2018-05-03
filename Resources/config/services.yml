@@ -85,49 +85,56 @@ services:
 
     core_attribute.form_type_options_provider.form:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Form
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: form }
 
     core_attribute.form_type_options_provider.text:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Text
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: text }
 
+
+    core_attribute.form_type_options_provider.color:
+        class: Core\AttributeBundle\FormTypeOptionsProvider\Color
+        public: false
+        tags:
+            - { name: dynamic_form.options_provider, alias: color_input }
+
     core_attribute.form_type_options_provider.textarea:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Textarea
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: textarea }
 
     core_attribute.form_type_options_provider.email:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Email
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: email }
 
     core_attribute.form_type_options_provider.integer:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Integer
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: integer }
 
     core_attribute.form_type_options_provider.money:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Money
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: money }
 
     core_attribute.form_type_options_provider.number:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Number
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: number }
 
     core_attribute.form_type_options_provider.url:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Url
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: url }
 
@@ -138,61 +145,61 @@ services:
 
     core_attribute.form_type_options_provider.country:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Country
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: country }
 
     core_attribute.form_type_options_provider.language:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Language
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: language }
 
     core_attribute.form_type_options_provider.locale:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Locale
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: locale }
 
     core_attribute.form_type_options_provider.timezone:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Timezone
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: timezone }
 
     core_attribute.form_type_options_provider.currency:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Currency
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: currency }
 
     core_attribute.form_type_options_provider.date:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Date
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: date }
 
     core_attribute.form_type_options_provider.time:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Time
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: time }
 
     core_attribute.form_type_options_provider.datetime:
         class: Core\AttributeBundle\FormTypeOptionsProvider\DateTime
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: datetime }
 
     core_attribute.form_type_options_provider.checkbox:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Checkbox
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: checkbox }
 
     core_attribute.form_type_options_provider.media:
         class: Core\AttributeBundle\FormTypeOptionsProvider\Media
-        publc: false
+        public: false
         arguments:
             - %sonata.media.admin.media.entity%
         tags:
@@ -200,19 +207,19 @@ services:
 
     core_attribute.form_type_options_provider.media_selector:
         class: Core\AttributeBundle\FormTypeOptionsProvider\MediaSelector
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: core_attribute_media_admin_selector_type }
 
     core_attribute.form_type_options_provider.category_selector:
         class: Core\AttributeBundle\FormTypeOptionsProvider\CategorySelector
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: core_attribute_category_admin_selector_type }
 
     core_attribute.form_type_options_provider.gallery_selector:
         class: Core\AttributeBundle\FormTypeOptionsProvider\GallerySelector
-        publc: false
+        public: false
         tags:
             - { name: dynamic_form.options_provider, alias: core_attribute_gallery_admin_selector_type }
 
@@ -257,3 +264,8 @@ services:
             - @doctrine.orm.entity_manager
         tags:
             - { name: validator.constraint_validator, alias: core_attribute.validator.constraints.type_class }
+
+    core_attribute.form.color_input_type:
+        class: Core\AttributeBundle\Form\ColorInputType
+        tags:
+            - { name: form.type, alias: color_input }
