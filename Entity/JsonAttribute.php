@@ -12,7 +12,7 @@ class JsonAttribute extends Attribute
 	function __toString()
 	{
 		if(is_scalar($this->getValue())){
-			return $this->getValue();
+			return (string)$this->getValue();
 		}
 
 		return json_encode($this->getValue());

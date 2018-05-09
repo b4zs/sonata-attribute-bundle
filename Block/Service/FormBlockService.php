@@ -30,7 +30,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 			'label' => false,
 			'keys' => array(
 				array('title', 'text', array('required' => true)),
-				array('user_form', 'entity', array(
+				array('user_form_object', 'entity', array(
 					'class'     => 'Core\AttributeBundle\Entity\Type',
 					'required'  => true,
 					'property'	=> 'label',
@@ -55,6 +55,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 			'template'      => 'CoreAttributeBundle:Block:form_base.html.twig',
 			'title'			=> '',
 			'user_form'		=> null,
+			'user_form_object'=> null,
 		));
 	}
 
@@ -71,7 +72,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 			if ($form->isValid()) {
 				$entityManager = $this->getEntityManager();
 				/** @var Type $attributeType */
-				$attributeType = $blockContext->getBlock()->getSetting('user_form');
+				$attributeType = $blockContext->getBlock()->getSetting('user_form_object');
 
 				$formData = $form->getData();
 				$submission = $this->createSubmission($attributeType, $formData);
@@ -112,22 +113,29 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 		$this->container = $container;
 	}
 
+	/*
+	 * "__sleep"
+	 */
 	protected function transformSettings(array $settings)
 	{
-		if($settings['user_form'] instanceof Type){
-			$settings['user_form'] = $settings['user_form']->getId();
+		if(isset($settings['user_form_object']) && $settings['user_form_object'] instanceof Type){
+			$settings['user_form'] = $settings['user_form_object']->getId();
+            $settings['user_form_object'] = null;
 		}
 
 		return $settings;
 	}
 
+    /***
+     * "__wakeup"
+     */
 	protected function reverseTransformSettings(array $settings)
 	{
 		if(!is_int($settings['user_form'])){
 			throw new \RuntimeException('Form id must be a valid integer');
 		}
 
-		$settings['user_form'] = $this->container->get('doctrine.orm.entity_manager')
+		$settings['user_form_object'] = $this->container->get('doctrine.orm.entity_manager')
 			->getRepository('CoreAttributeBundle:Type')->find($settings['user_form']);
 
 		return $settings;
@@ -169,9 +177,9 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 	{
 		$formFactory = $this->container->get('form.factory');
 		/** @var Type $rootType */
-		$rootType = $block->getSetting('user_form');
+		$rootType = $block->getSetting('user_form_object');
 
-		if(!$rootType instanceof Type /*|| $settings['user_form']->getFormType() !== 'form'*/){
+		if(!$rootType instanceof Type /*|| $settings['user_form_object']->getFormType() !== 'form'*/){
 			throw new \RuntimeException('Form can not be found');
 		}
 
@@ -202,7 +210,7 @@ class FormBlockService extends BaseTransformedSettingsBlockService
 	protected function getFlashMessage(BlockInterface $block) {
 
 		/** @var Type $rootType */
-		$rootType = $block->getSetting('user_form');
+		$rootType = $block->getSetting('user_form_object');
 
 		$options = $rootType->getFormOptions();
 

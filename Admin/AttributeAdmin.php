@@ -71,6 +71,15 @@ class AttributeAdmin extends AbstractAttributeAdmin
     public function createQuery($context = 'list')
     {
         $query = parent::createQuery($context);
+        
+        $query->innerJoin('o.type', 'record_type');
+        $query->andWhere('record_type.deletedAt IS NULL');
+
+        $em = $this->configurationPool->getContainer()->get('doctrine.orm.default_entity_manager');
+        if ($em->getFilters()->has('soft_deleteable')) {
+            $em->getFilters()->disable('soft_deleteable');
+        }
+
 
         return $query;
     }
