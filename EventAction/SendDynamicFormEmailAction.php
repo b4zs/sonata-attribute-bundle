@@ -171,9 +171,13 @@ class SendDynamicFormEmailAction extends SendEmailAction
         $rootType = $formSubmission->getType();
         $paths = TypeHelper::flattenType($rootType);
         $paths = array_combine($paths, $paths);
-        $paths = array_map(function ($n) {
-            return str_replace(current(explode('.', $n)), 'collection', $n) . '.value';
-        }, $paths);
+
+        $paths = array_map(function($n){
+            $n = explode('.', $n);
+            array_shift($n);
+            array_unshift($n, 'collection');
+            return implode('.', $n);
+        },$paths);
 
         $pa = new PropertyAccessor();
 
